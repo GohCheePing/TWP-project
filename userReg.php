@@ -128,7 +128,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <body>
 
 <form method="POST">
-    <h2 id= "registerTitle">Register</h2>
+  
 
     <!-- 错误逐条显示 -->
     <?php if (!empty($errors)): ?>
