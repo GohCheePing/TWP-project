@@ -1,4 +1,62 @@
-<h1>Hihi</h1>
-<p>This is a sample HTML file named hhhhh.html.</p>
-<h2>Hrm
-</h2>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Admin Login</title>
+  <link rel="stylesheet" href="admin login.css">
+</head>
+<body>
+
+  <div class="login-box">
+    <h2>Admin Login</h2>
+    <p class="subtitle">Dental Appointment System</p>
+
+    <form onsubmit="return validateAdminLogin();">
+
+      <div class="input-group">
+        <label>Admin ID / Username</label>
+        <input
+          type="text"
+          id="adminUsername"
+          placeholder="Enter Admin ID or Username"
+        >
+        <small id="adminUserError" class="error"></small>
+      </div>
+
+      <div class="input-group">
+        <label>Password</label>
+        <input
+          type="password"
+          id="adminPassword"
+          placeholder="Enter password"
+        >
+        <small id="adminPasswordError" class="error"></small>
+      </div>
+
+      <button type="submit" class="login-btn">LOGIN</button>
+    </form>
+  </div>
+
+  <script>
+    function validateAdminLogin() {
+      let valid = true;
+
+      document.getElementById("adminUserError").textContent = "";
+      document.getElementById("adminPasswordError").textContent = "";
+
+      if (adminUsername.value.trim() === "") {
+        adminUserError.textContent = "Please enter Admin ID / Username";
+        valid = false;
+      }
+
+      if (adminPassword.value.trim() === "") {
+        adminPasswordError.textContent = "Please enter password";
+        valid = false;
+      }
+
+      return valid;
+    }
+  </script>
+
+</body>
+</html>
