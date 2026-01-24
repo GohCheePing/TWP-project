@@ -1,7 +1,7 @@
 body {
   margin: 0;
   font-family: Arial, sans-serif;
-  background: #ffffff;
+  background: linear-gradient(135deg, #e6f0ff, #f8f9ff);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -9,14 +9,24 @@ body {
 }
 
 .login-box {
-  width: 320px;
+  width: 360px;
+  background: #ffffff;
+  padding: 35px;
+  border-radius: 12px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
   text-align: center;
 }
 
 .login-box h2 {
-  margin-bottom: 30px;
+  margin-bottom: 5px;
   font-size: 28px;
-  color: #222;
+  color: #2c3e50;
+}
+
+.subtitle {
+  font-size: 13px;
+  color: #777;
+  margin-bottom: 25px;
 }
 
 .input-group {
@@ -26,30 +36,31 @@ body {
 
 .input-group label {
   font-size: 14px;
-  color: #666;
+  color: #555;
 }
 
 .input-group input {
   width: 100%;
-  border: none;
-  border-bottom: 1px solid #ccc;
-  padding: 10px 5px;
+  padding: 10px;
+  margin-top: 6px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
   font-size: 14px;
   outline: none;
 }
 
-.input-group input::placeholder {
-  color: #aaa;
+.input-group input:focus {
+  border-color: #4a90e2;
 }
 
 .forgot {
   text-align: right;
-  margin-bottom: 25px;
+  margin-bottom: 20px;
 }
 
 .forgot a {
   font-size: 12px;
-  color: #777;
+  color: #666;
   text-decoration: none;
 }
 
@@ -58,12 +69,20 @@ body {
   padding: 12px;
   border: none;
   border-radius: 30px;
-  color: black;
+  background: linear-gradient(90deg, #4a90e2, #6fb1fc);
+  color: white;
   font-size: 15px;
   cursor: pointer;
-  background: lightgray;
 }
 
 .login-btn:hover {
   opacity: 0.9;
 }
+
+.error {
+  color: red;
+  font-size: 12px;
+  margin-top: 5px;
+  display: block;
+}
+
