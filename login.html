@@ -2,31 +2,35 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Login</title>
+  <title>User Login</title>
   <link rel="stylesheet" href="login.css">
 </head>
 <body>
 
   <div class="login-box">
-    <h2>Login</h2>
+    <h2>User Login</h2>
+    <p class="subtitle">Dental Appointment System</p>
 
-    <form>
+    <form onsubmit="return validateLogin();">
+
       <div class="input-group">
         <label>Username</label>
         <input
           type="text"
+          id="username"
           placeholder="Username / Email / Phone Number"
-          required
         >
+        <small id="usernameError" class="error"></small>
       </div>
 
       <div class="input-group">
         <label>Password</label>
         <input
           type="password"
-          placeholder="Type your password"
-          required
+          id="password"
+          placeholder="Enter password"
         >
+        <small id="passwordError" class="error"></small>
       </div>
 
       <div class="forgot">
@@ -36,6 +40,28 @@
       <button type="submit" class="login-btn">LOGIN</button>
     </form>
   </div>
+
+  <script>
+    function validateLogin() {
+      let valid = true;
+
+      document.getElementById("usernameError").textContent = "";
+      document.getElementById("passwordError").textContent = "";
+
+      if (username.value.trim() === "") {
+        usernameError.textContent =
+          "Please enter Username / Email / Phone Number";
+        valid = false;
+      }
+
+      if (password.value.trim() === "") {
+        passwordError.textContent = "Please enter password";
+        valid = false;
+      }
+
+      return valid;
+    }
+  </script>
 
 </body>
 </html>
