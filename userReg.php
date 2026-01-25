@@ -128,6 +128,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <body>
 
 <form method="POST">
+    <h1 class= "title">Customer Register</h1>
   
 
     <!-- 错误逐条显示 -->
@@ -150,12 +151,36 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <input type="text" name="name" placeholder="Full Name" value="<?= htmlspecialchars($name ?? '') ?>" required>
     <input type="text" name="phone" placeholder="Phone Number" value="<?= htmlspecialchars($phone ?? '') ?>" required>
     <input type="email" name="email" placeholder="Email" value="<?= htmlspecialchars($email ?? '') ?>" required>
-    <input type="password" name="password" placeholder="Password" required>
-    <input type="password" name="confirm_password" placeholder="Confirm Password" required>
+
+    <div class="password-wrapper">
+    <input type="password" name="password" id="password" placeholder="Password" required>
+    <span class="toggle-password" onclick="togglePassword('password', this)">👁</span>
+</div>
+
+<div class="password-wrapper">
+    <input type="password" name="confirm_password" id="confirm_password" placeholder="Confirm Password" required>
+    <span class="toggle-password" onclick="togglePassword('confirm_password', this)">👁</span>
+</div>
+
 </div>
 
     <button type="submit">Register</button>
 </form>
+
+<script>
+function togglePassword(inputId, icon) {
+    const input = document.getElementById(inputId);
+
+    if (input.type === "password") {
+        input.type = "text";
+        icon.textContent = "🙈";
+    } else {
+        input.type = "password";
+        icon.textContent = "👁";
+    }
+}
+</script>
+
 
 </body>
 </html>

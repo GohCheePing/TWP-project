@@ -57,7 +57,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <body>
 
 <form method="POST">
-    
+    <h1 class= "title">Customer Login</h1>
 
     <?php if ($message): ?>
         <div class="error"><?= htmlspecialchars($message) ?></div>
@@ -65,11 +65,32 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     <div id="inputBox">
         <input type="text" name="ic" placeholder="IC Number" value="<?= htmlspecialchars($ic ?? '') ?>" required>
-        <input type="password" name="password" placeholder="Password" required>
+
+    <div class="password-wrapper">
+    <input type="password" name="password" id="password" placeholder="Password" required>
+    <span class="toggle-password" onclick="togglePassword()">👁</span>
+</div>
+
     </div>
 
     <button type="submit">Login</button>
 </form>
+
+<script>
+function togglePassword() {
+    const pwd = document.getElementById("password");
+    const icon = document.querySelector(".toggle-password");
+
+    if (pwd.type === "password") {
+        pwd.type = "text";
+        icon.textContent = "🙈"; // 显示状态
+    } else {
+        pwd.type = "password";
+        icon.textContent = "👁"; // 隐藏状态
+    }
+}
+</script>
+
 
 </body>
 </html>
