@@ -99,7 +99,7 @@
 
         <!-- Logo -->
         <div class="logo">
-            <img src= "images/MeowLogo.png">
+            <img src="images/MeowLogo.png">
             <span>MyWebsite</span>
         </div>
 
@@ -112,8 +112,8 @@
 
         <!-- Login / Register -->
         <div class="auth-links">
-            <a href="login.php" class="login">Login</a>
-            <a href="register.php" class="register">Register</a>
+            <a href="userLog.php" class="login">Login</a>
+            <a href="userReg.php" class="register">Register</a>
         </div>
 
     </div>
