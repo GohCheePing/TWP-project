@@ -5,7 +5,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>My Website</title>
+    <title>Dental Appointment System</title>
     <style>
         * {
             margin: 0;
@@ -20,75 +20,45 @@
         header {
             background-color: #fff8f0;
             border-bottom: 1px solid #ddd;
-            padding: 12px 40px;
+            padding: 0 40px;
         }
 
         .nav-container {
             display: flex;
             align-items: center;
-            justify-content: space-between;
+            height: 70px;
         }
 
         /* Logo */
-        .logo {
+        .logo img {
+            height: 45px;
+        }
+
+        /* Menu area (占满 logo 右边空间) */
+        .menu {
+            flex: 1;
             display: flex;
+            justify-content: space-evenly;
             align-items: center;
         }
 
-        .logo img {
-            height: 45px;
-            margin-right: 10px;
-        }
-
-        .logo span {
-            font-size: 22px;
-            font-weight: bold;
-            color: #333;
-        }
-
-        /* Navigation */
-        nav ul {
-            list-style: none;
-            display: flex;
-            gap: 30px;
-        }
-
-        nav ul li a {
+        .menu a {
+            flex: 1;
+            text-align: center;
+            height: 70px;
+            line-height: 70px;
             text-decoration: none;
+            font-size: 16px;
+            font-weight: 600;
             color: #333;
-            font-weight: 500;
+            transition: all 0.3s ease;
         }
 
-        nav ul li a:hover {
+        /* Hover 效果 */
+        .menu a:hover {
+            background-color: #f1e6d6;
             color: #c59d5f;
-        }
-
-        /* Auth buttons */
-        .auth-links a {
-            margin-left: 20px;
-            text-decoration: none;
-            padding: 8px 16px;
-            border-radius: 5px;
-            font-size: 14px;
-        }
-
-        .login {
-            color: #333;
-            border: 1px solid #333;
-        }
-
-        .login:hover {
-            background-color: #333;
-            color: #fff;
-        }
-
-        .register {
-            background-color: #c59d5f;
-            color: #fff;
-        }
-
-        .register:hover {
-            background-color: #a8824a;
+            border-bottom: 3px solid #c59d5f;
         }
     </style>
 </head>
@@ -99,21 +69,15 @@
 
         <!-- Logo -->
         <div class="logo">
-            <img src="images/MeowLogo.png">
-            <span>MyWebsite</span>
+            <img src="images/Logo.png" alt="Logo">
         </div>
 
-        <!-- Navigation -->
-        <nav>
-            <ul>
-                <li><a href="about.php">About Us</a></li>
-            </ul>
-        </nav>
-
-        <!-- Login / Register -->
-        <div class="auth-links">
-            <a href="userLog.php" class="login">Login</a>
-            <a href="userReg.php" class="register">Register</a>
+        <!-- Menu -->
+        <div class="menu">
+            <a href="homepage.php">Home</a>
+            <a href="about.php">About Us</a>
+            <a href="userLog.php">Login</a>
+            <a href="userReg.php">Register</a>
         </div>
 
     </div>
