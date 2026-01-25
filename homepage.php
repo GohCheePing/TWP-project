@@ -64,62 +64,62 @@
     <div class="extra-service-grid">
 
         <div class="extra-item">
-            <img src="images/scaling.jpg" alt="">
-            <h3>Teeth Cleaning and Scaling</h3>
+        <img src="images/scaling.png" alt="">
+        <h3>Teeth Scaling</h3>
         </div>
 
         <div class="extra-item">
-            <img src="images/filling.jpg" alt="">
+            <img src="images/filling.png" alt="">
             <h3>Teeth Filling</h3>
         </div>
 
         <div class="extra-item">
-            <img src="images/clear aligner.jpg" alt="">
+            <img src="images/clear aligner.png" alt="">
             <h3>Clear Aligner</h3>
         </div>
 
         <div class="extra-item">
-            <img src="images/night guard.jpg" alt="">
+            <img src="images/night guard.png  " alt="">
             <h3>Night Guard</h3>
         </div>
 
         <div class="extra-item">
-            <img src="images/Wisdom Teeth Removal.jpg" alt="">
+            <img src="images/Wisdom Teeth Removal.png" alt="">
             <h3>Wisdom Teeth Removal</h3>
         </div>
 
         <div class="extra-item">
-            <img src="images/Fissure Sealant.jpg" alt="">
+            <img src="images/Fissure Sealant.png" alt="">
             <h3>Fissure Sealant</h3>
         </div>
 
         <div class="extra-item">
-            <img src="images/Crown & Bridge.jpg" alt="">
+            <img src="images/Crown & Bridge.png" alt="">
             <h3>Teeth Crown and Bridge</h3>
         </div>
 
         <div class="extra-item">
-            <img src="images/Root Canal Treatment.jpg" alt="">
+            <img src="images/Root Canal Treatment.png" alt="">
             <h3>Root Canal Treatment</h3>
         </div>
 
         <div class="extra-item">
-            <img src="images/Denture.jpg" alt="">
+            <img src="images/Denture.png" alt="">
             <h3>Denture</h3>
         </div>
 
         <div class="extra-item">
-            <img src="images/Full Mouth Rehabilitation.jpg" alt="">
+            <img src="images/Full Mouth Rehabilitation.png" alt="">
             <h3>Full Mouth Rehabilitation</h3>
         </div>
 
         <div class="extra-item">
-            <img src="images/Gum Treatment.jpg" alt="">
+            <img src="images/Gum Treatment.png" alt="">
             <h3>Gum Treatment</h3>
         </div>
 
         <div class="extra-item">
-            <img src="images/Consultant.jpg" alt="">
+            <img src="images/Consultant.png" alt="">
             <h3>Teeth Consultation</h3>
         </div>
 
