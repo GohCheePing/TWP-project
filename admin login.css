@@ -53,20 +53,10 @@ body {
   border-color: #4a90e2;
 }
 
-.forgot {
-  text-align: right;
-  margin-bottom: 20px;
-}
-
-.forgot a {
-  font-size: 12px;
-  color: #666;
-  text-decoration: none;
-}
-
 .login-btn {
   width: 100%;
   padding: 12px;
+  margin-top: 10px;
   border: none;
   border-radius: 30px;
   background: linear-gradient(90deg, #4a90e2, #6fb1fc);
