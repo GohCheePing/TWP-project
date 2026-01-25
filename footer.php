@@ -83,11 +83,16 @@
         <div class="footer-section">
             <h4>Contact</h4>
             <h5>Email:</h5>
-            <p>Meow2Dental@icloud.com</p>
+            <p>meowmewodental@gmail.com</p>
             <br>
             <h5>Phone:</h5>
             <p>+60 12-345 6789</p>
+            <br>
+            <h5>Webiste</h5>
+            <p>www.meowmeowdental.com</p>
         </div>
+
+
 
     </div>
 
