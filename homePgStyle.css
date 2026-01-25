@@ -7,6 +7,13 @@
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
 }
 
+.welcome-box img {
+    display: block;
+    margin: 0 auto 20px auto;
+    width: 120px;
+    height: auto;
+}
+
 .welcome-box h2 {
     color: #a86b32;
     text-align: center;

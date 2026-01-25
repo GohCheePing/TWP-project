@@ -56,6 +56,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 </head>
 <body>
 
+
 <form method="POST">
     <h1 class= "title">Customer Login</h1>
 
@@ -74,6 +75,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </div>
 
     <button type="submit">Login</button>
+    <p style="text-align: center;">Don't have an account? <a href="userReg.php">Register here</a></p>
+    <p style="text-align: center;"><a href="homepage.php">Go to home</a></p>
 </form>
 
 <script>

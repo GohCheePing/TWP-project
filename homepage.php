@@ -1,4 +1,5 @@
 <?php include 'header.php'; ?>
+
 <!DOCTYPE html>
 <head>
     <link rel="stylesheet" href="homePgStyle.css">
@@ -8,6 +9,7 @@
 <body>
 
 <div class="welcome-box">
+    <img src="images/Logo.png" alt="">
     <h2>Welcome to Meow Meow Dental</h2> 
     <p>
         We provide top-notch dental care for your feline friends.
@@ -127,3 +129,5 @@
 </div>
 
 </body>
+
+<?php include 'footer.php'; ?>
