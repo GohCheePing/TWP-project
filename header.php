@@ -99,7 +99,7 @@
 
         <!-- Logo -->
         <div class="logo">
-            <img src="images/MeowLogo.png" alt="Logo">
+            <img src= "images/MeowLogo.png">
             <span>MyWebsite</span>
         </div>
 
