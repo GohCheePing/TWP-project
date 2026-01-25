@@ -64,7 +64,7 @@
     <div class="extra-service-grid">
 
         <div class="extra-item">
-        <img src="images/scaling.png" alt="">
+        <img src="images/scalling.png" alt="">
         <h3>Teeth Scaling</h3>
         </div>
 
@@ -114,7 +114,7 @@
         </div>
 
         <div class="extra-item">
-            <img src="images/Gum Treatment.png" alt="">
+            <img src="images/gum.png" alt="">
             <h3>Gum Treatment</h3>
         </div>
 
