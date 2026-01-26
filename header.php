@@ -75,7 +75,7 @@
         <!-- Menu -->
         <div class="menu">
             <a href="homepage.php">Home</a>
-            <a href="about.php">About Us</a>
+            <a href="aboutUs.php">About Us</a>
             <a href="userLog.php">Login</a>
             <a href="userReg.php">Register</a>
         </div>

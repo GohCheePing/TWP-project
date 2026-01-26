@@ -64,7 +64,7 @@
         <div class="footer-section">
             <h4>Quick Links</h4>
             <p><a href="homepage.php">Home</a></p>
-            <p><a href="about.php">About Us</a></p>
+            <p><a href="aboutUS.php">About Us</a></p>
             <p><a href="userLog.php">Login</a></p>
             <p><a href="userReg.php">Register</a></p>
             <p><a href="AdminLog.php">Admin Login</a></p>
