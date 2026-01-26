@@ -2,7 +2,7 @@
 session_start();
 include 'database.php';
 
-$message = ''; // 用于显示错误或成功信息
+$message = ''; // Used to display error or success messages
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
@@ -10,13 +10,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $password = $_POST['password'] ?? '';
 
     // =====================
-    // 1️⃣ 空值检查
+    // 1️⃣ Null value check
     // =====================
     if (empty($ic) || empty($password)) {
         $message = "Please enter both IC Number and Password.";
     } else {
         // =====================
-        // 2️⃣ 从数据库获取用户
+        // 2️⃣ get user data from database
         // =====================
         $stmt = $conn->prepare("SELECT Cus_ID, Cus_Password, Cus_Name FROM customer WHERE Cus_IC = ?");
         $stmt->bind_param("s", $ic);
@@ -25,14 +25,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         if ($row = $result->fetch_assoc()) {
             // =====================
-            // 3️⃣ 验证密码
+            // 3️⃣ password verification
             // =====================
             if (password_verify($password, $row['Cus_Password'])) {
-                // 登录成功，保存 session
+                // Login successful, session saved.
                 $_SESSION['cus_id'] = $row['Cus_ID'];
                 $_SESSION['cus_name'] = $row['Cus_Name'];
 
-                // 可选：跳转到首页或用户面板
+                // Optional: Redirect to the homepage or user panel
                 header("Location: dashboard.php");
                 exit;
             } else {
@@ -86,10 +86,10 @@ function togglePassword() {
 
     if (pwd.type === "password") {
         pwd.type = "text";
-        icon.textContent = "🙈"; // 显示状态
+        icon.textContent = "🙈"; // password display
     } else {
         pwd.type = "password";
-        icon.textContent = "👁"; // 隐藏状态
+        icon.textContent = "👁"; // password hiden
     }
 }
 </script>

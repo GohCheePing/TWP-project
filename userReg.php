@@ -1,7 +1,7 @@
 <?php
 include 'database.php';
 
-$errors = [];   // 用来存多条错误信息
+$errors = [];   // Used to store multiple error messages
 $success = '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -14,7 +14,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $confirmPassword = $_POST['confirm_password'];
 
     // =====================
-    // 1️⃣ 空值检查
+    // 1️⃣ Null value check
     // =====================
     if (empty($ic))      $errors[] = "IC Number is required.";
     if (empty($name))    $errors[] = "Name is required.";
@@ -24,14 +24,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (empty($confirmPassword)) $errors[] = "Confirm password is required.";
 
     // =====================
-    // 2️⃣ Email 格式
+    // 2️⃣ Email format check
     // =====================
     if (!empty($email) && !filter_var($email, FILTER_VALIDATE_EMAIL)) {
         $errors[] = "Invalid email format.";
     }
 
     // =====================
-    // 3️⃣ 密码规则（逐条）
+    // 3️⃣ Password strength check
     // =====================
     if (!empty($password)) {
 
@@ -50,14 +50,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     // =====================
-    // 4️⃣ 确认密码
+    // 4️⃣ Password confirm check
     // =====================
     if (!empty($password) && !empty($confirmPassword) && $password !== $confirmPassword) {
         $errors[] = "Password and Confirm Password do not match.";
     }
 
     // =====================
-    // 5️⃣ 检查重复（只有前面没错才查）
+    // 5️⃣ Check for duplicates (only check if the preceding text is correct).）
     // =====================
     if (empty($errors)) {
 
@@ -87,7 +87,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     // =====================
-    // 6️⃣ 插入数据库
+    // 6️⃣ insert into database
     // =====================
     if (empty($errors)) {
 
@@ -131,7 +131,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <h1 class= "title">Customer Register</h1>
   
 
-    <!-- 错误逐条显示 -->
+    <!--Errors displayed one by one -->
     <?php if (!empty($errors)): ?>
         <div class="error">
             <ul>
@@ -142,7 +142,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </div>
     <?php endif; ?>
 
-    <!-- 成功提示 -->
+    <!-- Tips for success -->
     <?php if ($success): ?>
         <div class="success"><?= htmlspecialchars($success) ?></div>
     <?php endif; ?>

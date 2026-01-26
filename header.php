@@ -34,7 +34,7 @@
             height: 45px;
         }
 
-        /* Menu area (占满 logo 右边空间) */
+        /* Menu area */
         .menu {
             flex: 1;
             display: flex;
@@ -54,7 +54,7 @@
             transition: all 0.3s ease;
         }
 
-        /* Hover 效果 */
+        /* Hover effect */
         .menu a:hover {
             background-color: #f1e6d6;
             color: #c59d5f;

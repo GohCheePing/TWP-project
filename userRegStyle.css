@@ -10,7 +10,7 @@ body {
     align-items: center;
     justify-content: center;
 
-    /* 背景图只占屏幕70% */
+   
     background-image: url('images/bgImage1.jpeg');
     background-repeat: no-repeat;
     background-position: center center;
@@ -20,11 +20,11 @@ body {
 
 form {
     width: 380px;
-    background: transparent; /* 完全透明 */
+    background: transparent; /* completely transparent */
     padding: 25px 30px;
     border-radius: 10px;
-    box-shadow: none; /* 去掉阴影 */
-    border: none;      /* 去掉边框 */
+    box-shadow: none; /* Remove shadow */
+    border: none;      /* remove border */
 }
 
 .title {
@@ -38,11 +38,11 @@ input {
     width: 100%;
     padding: 11px 12px;
     margin-top: 10px;
-    border: 1px solid rgba(0,0,0,0.3); /* 半透明边框，让背景可见但仍可区分输入框 */
+    border: 1px solid rgba(0,0,0,0.3); /* Semi-transparent border, allowing the background to be visible while still distinguishing the input box */
     border-radius: 6px;
     font-size: 14px;
     transition: border-color 0.2s, box-shadow 0.2s;
-    background: rgba(255, 255, 255, 0.3); /* 半透明输入框背景，文字可读 */
+    background: rgba(255, 255, 255, 0.3); /* Semi-transparent input box background, text is readable */
     color:  black;
     text-align: center;
 }
@@ -67,7 +67,7 @@ input:focus {
 
 .password-wrapper input {
     width: 100%;
-    padding-right: 40px; /* 给眼睛留空间 */
+    padding-right: 40px; /* Give eyes space */
 }
 
 .toggle-password {
@@ -85,7 +85,7 @@ button {
     width: 100%;
     margin-top: 18px;
     padding: 12px;
-    background: rgba(53, 122, 189, 0.8); /* 半透明按钮 */
+    background: rgba(53, 122, 189, 0.8); /* Semi-transparent button */
     color: #fff;
     border: none;
     border-radius: 6px;
