@@ -65,7 +65,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <?php endif; ?>
 
     <div id="inputBox">
-        <input type="text" name="ic" placeholder="IC Number" value="<?= htmlspecialchars($ic ?? '') ?>" required>
+
+    <input type="text" name="ic" 
+      placeholder="IC Number" 
+      inputmode="numberic" 
+      maxlength="12" 
+      pattern="\d{12}"
+      title="IC Number must be exactly 12 digits" 
+      oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0, 12);"
+      value="<?= htmlspecialchars($ic ?? '') ?>" 
+      required>
+
 
     <div class="password-wrapper">
     <input type="password" name="password" id="password" placeholder="Password" required>

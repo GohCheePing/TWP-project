@@ -14,7 +14,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $confirmPassword = $_POST['confirm_password'];
 
     // =====================
-    // 1️⃣ Null value check
+    // Null value check
     // =====================
     if (empty($ic))      $errors[] = "IC Number is required.";
     if (empty($name))    $errors[] = "Name is required.";
@@ -24,19 +24,34 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (empty($confirmPassword)) $errors[] = "Confirm password is required.";
 
     // =====================
-    // 2️⃣ Email format check
+    // IC & Phone format check
+    // =====================
+
+    // IC Number: exactly 12 digits
+    if (!empty($ic) && !preg_match('/^\d{12}$/', $ic)) {
+    $errors[] = "IC Number must contain exactly 12 digits.";
+    }
+
+   // Phone Number: start with 01, total 10–11 digits
+   if (!empty($phone) && !preg_match('/^01\d{8,9}$/', $phone)) {
+    $errors[] = "Phone number must start with 01 and contain 10 to 11 digits.";
+   }
+
+
+    // =====================
+    // Email format check
     // =====================
     if (!empty($email) && !filter_var($email, FILTER_VALIDATE_EMAIL)) {
         $errors[] = "Invalid email format.";
     }
 
     // =====================
-    // 3️⃣ Password strength check
+    // Password strength check
     // =====================
     if (!empty($password)) {
 
         if (strlen($password) < 8) {
-            $errors[] = "Password must be at least 8 characters.";
+            $errors[] = "Password must be at least 8 characters.At least one uppercase letter, one lowercase letter, one number, and one symbol are required.";
         }
         if (!preg_match('/[A-Z]/', $password)) {
             $errors[] = "Password must contain at least one uppercase letter.";
@@ -44,20 +59,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (!preg_match('/[a-z]/', $password)) {
             $errors[] = "Password must contain at least one lowercase letter.";
         }
+
+        if (!preg_match('/[0-9]/', $password)) {
+            $errors[] = "Password must contain at least one number.";
+        }
         if (!preg_match('/[\W_]/', $password)) {
             $errors[] = "Password must contain at least one symbol.";
         }
     }
 
     // =====================
-    // 4️⃣ Password confirm check
+    // Password confirm check
     // =====================
     if (!empty($password) && !empty($confirmPassword) && $password !== $confirmPassword) {
         $errors[] = "Password and Confirm Password do not match.";
     }
 
     // =====================
-    // 5️⃣ Check for duplicates (only check if the preceding text is correct).）
+    // Check for duplicates (only check if the preceding text is correct).）
     // =====================
     if (empty($errors)) {
 
@@ -147,10 +166,30 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <div class="success"><?= htmlspecialchars($success) ?></div>
     <?php endif; ?>
 <div id = "inputBox">
-    <input type="text" name="ic" placeholder="IC Number" value="<?= htmlspecialchars($ic ?? '') ?>" required>
-    <input type="text" name="name" placeholder="Full Name" value="<?= htmlspecialchars($name ?? '') ?>" required>
-    <input type="text" name="phone" placeholder="Phone Number" value="<?= htmlspecialchars($phone ?? '') ?>" required>
-    <input type="email" name="email" placeholder="Email" value="<?= htmlspecialchars($email ?? '') ?>" required>
+
+    <input type="text" name="ic"
+       placeholder="IC Number"
+       inputmode="numeric"
+       maxlength="12"
+       pattern="\d{12}"
+       title="IC Number must be exactly 12 digits"
+       oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0, 12);"
+       value="<?= htmlspecialchars($ic ?? '') ?>"
+       required>
+       
+       <input type="text" name="name" placeholder="Full Name" value="<?= htmlspecialchars($name ?? '') ?>" required>
+       
+       <input type="text" name="phone"
+       placeholder="Phone Number"
+       inputmode="numeric"
+       pattern="01\d{8,9}"
+       title="Phone must start with 01 and be 10–11 digits"
+       maxlength="11"
+       oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0, 11);"
+       value="<?= htmlspecialchars($phone ?? '') ?>"
+       required>
+       
+       <input type="email" name="email" placeholder="Email" value="<?= htmlspecialchars($email ?? '') ?>" required>
 
     <div class="password-wrapper">
     <input type="password" name="password" id="password" placeholder="Password" required>
