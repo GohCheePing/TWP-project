@@ -33,7 +33,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $_SESSION['cus_name'] = $row['Cus_Name'];
 
                 // Optional: Redirect to the homepage or user panel
-                header("Location: dashboard.php");
+                header("Location: userDashBoard.php");
                 exit;
             } else {
                 $message = "Incorrect IC Number or Password.";
