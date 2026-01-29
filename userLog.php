@@ -91,7 +91,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <p style="text-align: center;">
             Don't have an account? <a href="userReg.php">Register</a>
         </p>
-        <br>
+    
+        <p style="text-align:center;">
+    <a href="forgot_password.php">Forgot Password?</a>
+</p>
+<br>
         <p style="text-align: center;">
             <a href="homepage.php">Go to home</a>
         </p>

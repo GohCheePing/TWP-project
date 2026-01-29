@@ -145,3 +145,22 @@ ul {
     max-width: 380px;
     box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
 }
+
+.password-wrapper {
+    position: relative;
+}
+
+.password-wrapper input {
+    width: 100%;
+    padding-right: 40px;
+}
+
+.toggle-password {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    font-size: 18px;
+    user-select: none;
+}
