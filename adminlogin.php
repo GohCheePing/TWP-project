@@ -1,57 +1,59 @@
 <?php
-$fixedUsername = "admin";
-$fixedPassword = "admin123";
+session_start();
 
 $error = "";
 
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
+$adminUsername = "admin";
+$adminPassword = "admin123";
 
-  $inputUsername = $_POST["adminUsername"];
-  $inputPassword = $_POST["adminPassword"];
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
-  if ($inputUsername === $fixedUsername && $inputPassword === $fixedPassword) {
-    header("Location: editproduct.php");
-    exit();
-  } else {
-    $error = "Invalid Admin Username or Password";
-  }
+    $inputUsername = trim($_POST["username"] ?? "");
+    $inputPassword = trim($_POST["password"] ?? "");
+
+    if ($inputUsername === "" || $inputPassword === "") {
+        $error = "Please enter Admin Username and Password.";
+    } else {
+        if ($inputUsername === $adminUsername && $inputPassword === $adminPassword) {
+            $_SESSION["admin"] = true;
+            header("Location: editproduct.php");
+            exit;
+        } else {
+            $error = "Invalid Admin Username or Password.";
+        }
+    }
 }
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Admin Login</title>
-  <link rel="stylesheet" href="admin login.css">
+    <meta charset="UTF-8">
+    <title>Admin Login</title>
+    <link rel="stylesheet" href="userRegStyle.css">
 </head>
 <body>
 
-  <div class="login-box">
-    <h2>Admin Login</h2>
-    <p class="subtitle">Dental Appointment System</p>
+<form method="POST">
+    <div class="login-card">
 
-    <form method="post">
+        <h1 class="title">Admin Login</h1>
 
-      <div class="input-group">
-        <label>Admin Username</label>
-        <input type="text" name="adminUsername" required>
-      </div>
+        <?php if ($error): ?>
+            <div class="error"><?= htmlspecialchars($error) ?></div>
+        <?php endif; ?>
 
-      <div class="input-group">
-        <label>Password</label>
-        <input type="password" name="adminPassword" required>
-      </div>
+        <input type="text" name="username" placeholder="Admin Username" required>
+        <input type="password" name="password" placeholder="Password" required>
 
-      <?php if ($error != "") { ?>
-        <p class="error"><?php echo $error; ?></p>
-      <?php } ?>
+        <button type="submit">Login</button>
 
-      <button type="submit" class="login-btn">LOGIN</button>
-    </form>
+        <p style="text-align:center;">
+            <a href="homepage.php">Back to Home</a>
+        </p>
 
-  </div>
+    </div>
+</form>
 
 </body>
-
 </html>
