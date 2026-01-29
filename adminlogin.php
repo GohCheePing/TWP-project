@@ -23,7 +23,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <head>
   <meta charset="UTF-8">
   <title>Admin Login</title>
-  <link rel="stylesheet" href="adminlogin.css">
+  <link rel="stylesheet" href="admin login.css">
 </head>
 <body>
 
@@ -53,4 +53,5 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   </div>
 
 </body>
+
 </html>
