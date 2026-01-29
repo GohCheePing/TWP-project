@@ -147,6 +147,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <body>
 
 <form method="POST">
+
+    <div class="login-card">
     <h1 class= "title">Customer Register</h1>
   
 
@@ -204,8 +206,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 </div>
 
     <button type="submit">Register</button>
-    <p style="text-align: center;">Already have account? <a href="userLog.php">Login here</a></p>
+    <p style="text-align: center;">Already have account? <a href="userLog.php">Login</a></p>
+    <br>
     <p style="text-align: center;"><a href="homepage.php">Go to home</a></p>
+
+    </div>
 </form>
 
 <script>

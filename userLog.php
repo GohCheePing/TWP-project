@@ -58,36 +58,48 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 
 <form method="POST">
-    <h1 class= "title">Customer Login</h1>
 
-    <?php if ($message): ?>
-        <div class="error"><?= htmlspecialchars($message) ?></div>
-    <?php endif; ?>
+    <div class="login-card">
 
-    <div id="inputBox">
+        <h1 class="title">Customer Login</h1>
 
-    <input type="text" name="ic" 
-      placeholder="IC Number" 
-      inputmode="numberic" 
-      maxlength="12" 
-      pattern="\d{12}"
-      title="IC Number must be exactly 12 digits" 
-      oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0, 12);"
-      value="<?= htmlspecialchars($ic ?? '') ?>" 
-      required>
+        <?php if ($message): ?>
+            <div class="error"><?= htmlspecialchars($message) ?></div>
+        <?php endif; ?>
 
+        <div id="inputBox">
 
-    <div class="password-wrapper">
-    <input type="password" name="password" id="password" placeholder="Password" required>
-    <span class="toggle-password" onclick="togglePassword()">👁</span>
-</div>
+            <input type="text" name="ic" 
+              placeholder="IC Number" 
+              inputmode="numeric" 
+              maxlength="12" 
+              pattern="\d{12}"
+              title="IC Number must be exactly 12 digits" 
+              oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0, 12);"
+              value="<?= htmlspecialchars($ic ?? '') ?>" 
+              required>
+
+            <div class="password-wrapper">
+                <input type="password" name="password" id="password" placeholder="Password" required>
+                <span class="toggle-password" onclick="togglePassword()">👁</span>
+            </div>
+
+        </div>
+
+        <button type="submit">Login</button>
+
+        <p style="text-align: center;">
+            Don't have an account? <a href="userReg.php">Register</a>
+        </p>
+        <br>
+        <p style="text-align: center;">
+            <a href="homepage.php">Go to home</a>
+        </p>
 
     </div>
 
-    <button type="submit">Login</button>
-    <p style="text-align: center;">Don't have an account? <a href="userReg.php">Register here</a></p>
-    <p style="text-align: center;"><a href="homepage.php">Go to home</a></p>
 </form>
+
 
 <script>
 function togglePassword() {
