@@ -10,17 +10,11 @@ body {
 
 .login-box {
   width: 360px;
-  background: #ffffff;
+  background: white;
   padding: 35px;
   border-radius: 12px;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 10px 25px rgba(0,0,0,0.15);
   text-align: center;
-}
-
-.login-box h2 {
-  margin-bottom: 5px;
-  font-size: 28px;
-  color: #2c3e50;
 }
 
 .subtitle {
@@ -45,33 +39,20 @@ body {
   margin-top: 6px;
   border: 1px solid #ccc;
   border-radius: 6px;
-  font-size: 14px;
-  outline: none;
-}
-
-.input-group input:focus {
-  border-color: #4a90e2;
 }
 
 .login-btn {
   width: 100%;
   padding: 12px;
-  margin-top: 10px;
   border: none;
   border-radius: 30px;
   background: linear-gradient(90deg, #4a90e2, #6fb1fc);
   color: white;
-  font-size: 15px;
   cursor: pointer;
-}
-
-.login-btn:hover {
-  opacity: 0.9;
 }
 
 .error {
   color: red;
   font-size: 12px;
-  margin-top: 5px;
-  display: block;
+  margin-top: 10px;
 }
