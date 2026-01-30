@@ -14,21 +14,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $confirm = $_POST['confirm_password'] ?? '';
 
     // =====================
-    // 1️⃣ 空值检查
+    // Null value check
     // =====================
     if (empty($ic) || empty($phone) || empty($email) || empty($newPass) || empty($confirm)) {
         $errors[] = "All fields are required.";
     }
 
     // =====================
-    // 2️⃣ 新密码确认
+    // New password match check
     // =====================
     if ($newPass !== $confirm) {
-        $errors[] = "New password and confirmation do not match.";
+        $errors[] = "New password and confirm password do not match.";
     }
 
     // =====================
-    // 3️⃣ Password strength check
+    // Password strength check
     // =====================
     if (!empty($newPass)) {
 
@@ -50,7 +50,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     // =====================
-    // 4️⃣ 没有错误才进数据库
+    // Write to DB with no errors
     // =====================
     if (empty($errors)) {
 
@@ -116,15 +116,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             <input type="text" name="ic"
                    placeholder="IC Number"
+                   inputmode="numeric"
                    maxlength="12"
+                   pattern="\d{12}"
+                   title="IC Number must be exactly 12 digits"
+                   oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0, 12);"
+                   value="<?= htmlspecialchars($ic ?? '') ?>"
                    required>
 
             <input type="text" name="phone"
                    placeholder="Phone Number"
+                   inputmode="numeric"
+                   pattern="01\d{8,9}"
+                   title="Phone must start with 01 and be 10–11 digits"
+                   maxlength="11"
+                   oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0, 11);"
+                   value="<?= htmlspecialchars($phone ?? '') ?>"
                    required>
 
             <input type="email" name="email"
                    placeholder="Email Address"
+                   value="<?= htmlspecialchars($email ?? '') ?>"
                    required>
 
             <div class="password-wrapper">
