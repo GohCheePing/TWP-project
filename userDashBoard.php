@@ -51,19 +51,11 @@ if (!isset($_SESSION['cus_id'])) {
         <ul class="nav nav-pills flex-column gap-1">
 
             <li class="nav-item">
-                <a href="profile.php" class="nav-link">Profile</a>
-            </li>
-
-            <li class="nav-item">
                 <a href="service_catalogue.php" class="nav-link">Service Catalogue</a>
             </li>
 
             <li class="nav-item">
                 <a href="service_details.php" class="nav-link">Services Detail</a>
-            </li>
-
-            <li class="nav-item">
-                <a href="change_password.php" class="nav-link">Change Password</a>
             </li>
 
             <li class="nav-item">
