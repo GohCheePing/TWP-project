@@ -1,99 +1,143 @@
 <?php
 session_start();
+include 'database.php'; // 确保连接的是 dentaldb
 
-// ❗ 未登录不能访问
+// 1. 安全检查：如果未登录，直接跳回登录页
 if (!isset($_SESSION['cus_id'])) {
     header("Location: userLog.php");
     exit;
 }
+
+$cus_id = $_SESSION['cus_id'];
+$cus_name = $_SESSION['cus_name'];
+
+// 2. 数据抓取：获取统计信息
+// 统计总预约数
+$count_query = "SELECT COUNT(*) as total FROM appointments WHERE cus_id = ?";
+$c_stmt = $conn->prepare($count_query);
+$c_stmt->bind_param("i", $cus_id);
+$c_stmt->execute();
+$total_apps = $c_stmt->get_result()->fetch_assoc()['total'];
+
+// 获取最近的一次预约（使用你数据库中的 service_type 字段）
+$query = "SELECT * FROM appointments WHERE cus_id = ? ORDER BY app_date DESC, app_time DESC LIMIT 1";
+$stmt = $conn->prepare($query);
+$stmt->bind_param("i", $cus_id);
+$stmt->execute();
+$recent_app = $stmt->get_result()->fetch_assoc();
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>User Dashboard</title>
-
-    <!-- Bootstrap 5 CSS -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Dashboard - Meow Meow Dental</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
     <style>
-        body {
-            min-height: 100vh;
+        :root {
+            --sidebar-bg: #ffffff;
+            --main-bg: #f4f7f6;
+            --accent-color: #6cc4ff; /* 对应你 header 的蓝色系 */
         }
-
-        .sidebar {
-            width: 260px;
-            min-height: 100vh;
-        }
-
-        .sidebar .nav-link {
-            color: #333;
-        }
-
-        .sidebar .nav-link:hover {
-            background-color: #f1f1f1;
-        }
-
-        .sidebar .nav-link.active {
-            background-color: #0d6efd;
-            color: #fff;
-        }
+        body { background-color: var(--main-bg); min-height: 100vh; display: flex; }
+        
+        /* 侧边栏样式 */
+        .sidebar { width: 260px; background: var(--sidebar-bg); border-right: 1px solid #e0e0e0; position: fixed; height: 100vh; padding: 20px; }
+        .main-content { margin-left: 260px; width: 100%; padding: 40px; }
+        
+        .nav-link { color: #333; margin: 10px 0; border-radius: 8px; transition: 0.3s; }
+        .nav-link:hover, .nav-link.active { background-color: var(--accent-color); color: white; }
+        
+        /* 卡片样式 */
+        .stat-card { border: none; border-radius: 15px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
+        .welcome-section { background: linear-gradient(135deg, #6cc4ff, #3aaed8); color: white; border-radius: 15px; padding: 30px; margin-bottom: 30px; }
     </style>
 </head>
 <body>
 
-<div class="d-flex">
+<div class="sidebar d-flex flex-column">
+    <div class="text-center mb-4">
+        <img src="images/Logo.png" alt="Logo" style="width: 80px;">
+        <h5 class="mt-2" style="color: #a86b32;">Meow Dental</h5>
+    </div>
+    <ul class="nav nav-pills flex-column mb-auto">
+        <li class="nav-item">
+            <a href="userDashBoard.php" class="nav-link active"><i class="bi bi-speedometer2 me-2"></i> Dashboard</a>
+        </li>
+        <li>
+            <a href="service_catalogue.php" class="nav-link"><i class="bi bi-grid me-2"></i> Service Catalogue</a>
+        </li>
+        <li>
+            <a href="make_appointment.php" class="nav-link"><i class="bi bi-calendar-plus me-2"></i> Book Appointment</a>
+        </li>
+        <li>
+            <a href="appointment_records.php" class="nav-link"><i class="bi bi-journal-text me-2"></i> My Records</a>
+        </li>
+        <li>
+            <a href="aboutUs.php" class="nav-link"><i class="bi bi-people me-2"></i> About Us</a>
+        </li>
+    </ul>
+    <hr>
+    <a href="logout.php" class="nav-link text-danger"><i class="bi bi-box-arrow-right me-2"></i> Logout</a>
+</div>
 
-    <!-- Sidebar -->
-    <div class="sidebar bg-light border-end p-3">
-        <h4 class="text-center mb-4">User Panel</h4>
-
-        <ul class="nav nav-pills flex-column gap-1">
-
-            <li class="nav-item">
-                <a href="service_catalogue.php" class="nav-link">Service Catalogue</a>
-            </li>
-
-            <li class="nav-item">
-                <a href="service_details.php" class="nav-link">Services Detail</a>
-            </li>
-
-            <li class="nav-item">
-                <a href="appointment_records.php" class="nav-link">View Appointment Record</a>
-            </li>
-
-            <li class="nav-item">
-                <a href="make_appointment.php" class="nav-link">Make Appointment</a>
-            </li>
-
-            <li class="nav-item mt-3">
-                <a href="homepage.php" class="nav-link text-danger">Logout</a>
-            </li>
-
-        </ul>
+<div class="main-content">
+    <div class="welcome-section shadow-sm">
+        <h1>Welcome back, <?= htmlspecialchars($cus_name) ?>!</h1>
+        <p>Manage your dental health and upcoming appointments here.</p>
+        <div class="badge bg-white text-dark p-2"><?= date('l, F j, Y') ?></div>
     </div>
 
-    <!-- Main Content -->
-    <div class="flex-grow-1 p-4">
-
-        <h2>Welcome, <?= htmlspecialchars($_SESSION['cus_name']) ?></h2>
-        <p class="text-muted">You are logged in to your dashboard.</p>
-
-        <div class="card mt-4">
-            <div class="card-body">
-                <h5 class="card-title">Dashboard Overview</h5>
-                <p class="card-text">
-                    Use the sidebar to view your profile, browse services, manage appointments,
-                    or update your account settings.
-                </p>
+    <div class="row g-4">
+        <div class="col-md-4">
+            <div class="card stat-card p-4 bg-white">
+                <div class="d-flex align-items-center">
+                    <div class="bg-light p-3 rounded-circle me-3">
+                        <i class="bi bi-calendar-check text-primary fs-3"></i>
+                    </div>
+                    <div>
+                        <h6 class="text-muted mb-0">Total Bookings</h6>
+                        <h3 class="mb-0"><?= $total_apps ?></h3>
+                    </div>
+                </div>
             </div>
         </div>
 
+        <div class="col-md-8">
+            <div class="card stat-card p-4 bg-white">
+                <h5 class="mb-3">Latest Appointment Status</h5>
+                <?php if ($recent_app): ?>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <p class="text-muted mb-1">Service</p>
+                            <p class="fw-bold"><?= htmlspecialchars($recent_app['service_type']) ?></p>
+                        </div>
+                        <div class="col-sm-6">
+                            <p class="text-muted mb-1">Status</p>
+                            <?php 
+                                $statusClass = ($recent_app['status'] == 'Confirmed') ? 'bg-success' : 'bg-warning text-dark';
+                            ?>
+                            <span class="badge <?= $statusClass ?>"><?= $recent_app['status'] ?></span>
+                        </div>
+                        <div class="col-sm-6 mt-2">
+                            <p class="text-muted mb-1">Date & Time</p>
+                            <p class="fw-bold"><?= $recent_app['app_date'] ?> at <?= $recent_app['app_time'] ?></p>
+                        </div>
+                        <div class="col-sm-6 mt-2 d-flex align-items-end">
+                            <a href="appointment_records.php" class="btn btn-sm btn-outline-primary">View All Records</a>
+                        </div>
+                    </div>
+                <?php else: ?>
+                    <p class="text-muted">You haven't made any appointments yet.</p>
+                    <a href="make_appointment.php" class="btn btn-primary btn-sm w-25">Book Now</a>
+                <?php endif; ?>
+            </div>
+        </div>
     </div>
-
 </div>
 
-<!-- Bootstrap JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
