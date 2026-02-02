@@ -66,12 +66,12 @@
     <div class="extra-service-grid">
 
         <div class="extra-item">
-        <img src="images/scalling.png" alt="">
+        <img src="images/teeth scaling.png" alt="">
         <h3>Teeth Scaling</h3>
         </div>
 
         <div class="extra-item">
-            <img src="images/filling.png" alt="">
+            <img src="images/teeth filling.png" alt="">
             <h3>Teeth Filling</h3>
         </div>
 
@@ -96,7 +96,7 @@
         </div>
 
         <div class="extra-item">
-            <img src="images/Crown & Bridge.png" alt="">
+            <img src="images/Teeth Crown and Bridge.png" alt="">
             <h3>Teeth Crown and Bridge</h3>
         </div>
 
@@ -116,12 +116,12 @@
         </div>
 
         <div class="extra-item">
-            <img src="images/gum.png" alt="">
+            <img src="images/gum treatment.png" alt="">
             <h3>Gum Treatment</h3>
         </div>
 
         <div class="extra-item">
-            <img src="images/Consultant.png" alt="">
+            <img src="images/teeth Consultation.png" alt="">
             <h3>Teeth Consultation</h3>
         </div>
 

@@ -60,7 +60,7 @@ $recent_app = $stmt->get_result()->fetch_assoc();
 <div class="sidebar d-flex flex-column">
     <div class="text-center mb-4">
         <img src="images/Logo.png" alt="Logo" style="width: 80px;">
-        <h5 class="mt-2" style="color: #a86b32;">Meow Dental</h5>
+        <h5 class="mt-2" style="color: #a86b32;">Meow Meow Dental</h5>
     </div>
     <ul class="nav nav-pills flex-column mb-auto">
         <li class="nav-item">
