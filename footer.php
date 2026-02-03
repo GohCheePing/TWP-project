@@ -67,7 +67,7 @@
             <p><a href="aboutUS.php">About Us</a></p>
             <p><a href="userLog.php">Login</a></p>
             <p><a href="userReg.php">Register</a></p>
-            <p><a href="AdminLog.php">Admin Login</a></p>
+            <p><a href="adminLog.php">Admin Login</a></p>
         </div>
 
         <div class="footer-section">
