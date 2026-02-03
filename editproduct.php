@@ -106,34 +106,28 @@ if (!isset($_SESSION["admin"])) {
 
     <div class="dashboard-grid">
 
-        <div class="card">
-            <h3>Manage Services</h3>
-            <p>
-                View, add, edit, or remove dental services offered by the clinic.
-            </p>
-            <a href="#">Go</a>
-        </div>
-
-        <div class="card">
-            <h3>Manage Appointments</h3>
-            <p>
-                View customer appointments and manage scheduling.
-            </p>
-            <a href="#">Go</a>
-        </div>
-
-        <div class="card">
-            <h3>Manage Customers</h3>
-            <p>
-                View registered customer information and account details.
-            </p>
-            <a href="#">Go</a>
-        </div>
-
+    <div class="card">
+        <h3>Manage Services</h3>
+        <p>
+            View, add, edit, or remove dental services offered by the clinic.
+        </p>
+        <a href="adminservices.php">Go</a>
     </div>
 
-    <div class="logout">
-        <a href="adminlogout.php">Logout</a>
+    <div class="card">
+        <h3>Manage Appointments</h3>
+        <p>
+            View customer appointments and manage scheduling.
+        </p>
+        <a href="adminappointments.php">Go</a>
+    </div>
+
+    <div class="card">
+        <h3>Manage Customers</h3>
+        <p>
+            View registered customer information and account details.
+        </p>
+        <a href="admincustomers.php">Go</a>
     </div>
 
 </div>
