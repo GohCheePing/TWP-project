@@ -2,7 +2,7 @@
 session_start();
 include 'database.php';
 
-// 1. 安全检查：未登录重定向
+/* ========== 1. 登录检查 ========== */
 if (!isset($_SESSION['cus_id'])) {
     header("Location: userLog.php");
     exit;
@@ -10,121 +10,178 @@ if (!isset($_SESSION['cus_id'])) {
 
 $message = "";
 $cus_id = $_SESSION['cus_id'];
+$selected_type = $_GET['type'] ?? "";
 
-// 2. 接收从 Service Catalogue 传来的参数
-$selected_val = isset($_GET['type']) ? $_GET['type'] : "";
+/* ========== 2. 获取服务列表 ========== */
+$service_query = "SELECT service_name FROM services";
+$service_result = $conn->query($service_query);
 
-// 3. 处理表单提交
+/* ========== 3. 处理表单提交 ========== */
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+
     $app_date = $_POST['app_date'];
     $app_time = $_POST['app_time'];
-    $service_type = $_POST['service_type']; // 这里拿到的是 <option> 的 value (即图片名)
+    $service_type = $_POST['service_type'];
 
-    // 执行插入
-    $sql = "INSERT INTO appointments (cus_id, app_date, app_time, service_type, status) VALUES (?, ?, ?, ?, 'Pending')";
-    $stmt = $conn->prepare($sql);
-    $stmt->bind_param("isss", $cus_id, $app_date, $app_time, $service_type);
+    // 星期：1(Mon) - 7(Sun)
+    $day_of_week = date('N', strtotime($app_date));
 
-    if ($stmt->execute()) {
-        $message = "<div class='success'>Booking successful! <a href='appointment_records.php' style='color:blue;'>Check Records</a></div>";
+    // 把时间转成分钟
+    $hour = (int)date('H', strtotime($app_time));
+    $minute = (int)date('i', strtotime($app_time));
+    $timeMin = $hour * 60 + $minute;
+
+    // 统一营业规则
+    if ($day_of_week <= 5) {
+        // 周一至周五
+        $open = 10 * 60;
+        $last = 17 * 60 + 30;
     } else {
-        $message = "<div class='error'>Error: " . $conn->error . "</div>";
+        // 周末
+        $open = 11 * 60;
+        $last = 16 * 60 + 30;
+    }
+
+    if ($timeMin < $open || $timeMin > $last) {
+        $message = "<div class='error'>Selected time is outside business hours.</div>";
+    } else {
+
+        $sql = "INSERT INTO appointments 
+                (cus_id, app_date, app_time, service_type, status)
+                VALUES (?, ?, ?, ?, 'Pending')";
+
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("isss", $cus_id, $app_date, $app_time, $service_type);
+
+        if ($stmt->execute()) {
+            $message = "<div class='success'>
+                Booking successful!
+                <a href='appointment_records.php' style='font-weight:bold;color:#007bff;'>
+                    Check Records
+                </a>
+            </div>";
+        } else {
+            $message = "<div class='error'>Database error.</div>";
+        }
     }
 }
-
-// 4. 定义服务映射 (图片名 => 显示名)
-// 这样你以后修改名字只需要改这里，不需要改整个表单
-$services = [
-    "clear aligner" => "✨ Clear Aligner",
-    "night guard" => "🌙 Night Guard",
-    "Wisdom Teeth Removal" => "🦷 (Wisdom Teeth Removal)",
-    "Fissure Sealant" => "🛡️ (Fissure Sealant)",
-    "Crown & Bridge" => "💎 (Crown & Bridge)",
-    "Root Canal Treatment" => "🧪 (Root Canal)",
-    "Denture" => "😁 (Denture)",
-    "gum" => "🩸 (Gum Treatment)",
-    "Full Mouth Rehabilitation" => "🏥 (Full Mouth Rehab)"
-];
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Make Appointment - Meow Meow Dental</title>
-    <link rel="stylesheet" href="userRegStyle.css">
-    <style>
-        /* 针对预约页面的特定调整，确保卡片在背景图上清晰 */
-        .login-card {
-            background: rgba(255, 255, 255, 0.85);
-            padding: 30px;
-            border-radius: 15px;
-            width: 100%;
-            max-width: 400px;
-        }
-        .form-group {
-            margin-bottom: 15px;
-            text-align: left;
-        }
-        label {
-            font-size: 14px;
-            font-weight: bold;
-            color: #333;
-            margin-bottom: 5px;
-            display: block;
-        }
-        select, input {
-            width: 100%;
-            padding: 10px;
-            border-radius: 6px;
-            border: 1px solid #ccc;
-            background: white;
-        }
-        .btn-home {
-            display: block;
-            text-align: center;
-            margin-top: 15px;
-            font-size: 13px;
-            color: #555;
-            text-decoration: none;
-        }
-    </style>
+<meta charset="UTF-8">
+<title>Book Appointment - Meow Meow Dental</title>
+<link rel="stylesheet" href="userRegStyle.css">
+
+<style>
+.form-group { margin-bottom: 15px; text-align: left; }
+.form-group label { font-weight: bold; margin-bottom: 5px; display:block; }
+select, input {
+    width: 100%;
+    padding: 12px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+}
+.open-hours-info {
+    font-size: 12px;
+    background: #fff3e0;
+    padding: 8px;
+    border-radius: 6px;
+    margin-top: 5px;
+}
+</style>
 </head>
+
 <body>
 
-<form method="POST">
-    <div class="login-card">
-        <h1 class="title">New Appointment</h1>
+<form method="POST" id="appointmentForm">
+<div class="login-card">
 
-        <?php echo $message; ?>
+<h1 class="title">New Appointment</h1>
 
-        <div class="form-group">
-            <label>Select Dental Service</label>
-            <select name="service_type" required>
-                <option value="">-- Choose a treatment --</option>
-                <?php foreach ($services as $fileName => $displayName): ?>
-                    <option value="<?= $fileName ?>" <?= ($selected_val == $fileName) ? 'selected' : '' ?>>
-                        <?= $displayName ?>
-                    </option>
-                <?php endforeach; ?>
-            </select>
-        </div>
+<?= $message ?>
 
-        <div class="form-group">
-            <label>Preferred Date</label>
-            <input type="date" name="app_date" min="<?= date('Y-m-d') ?>" required>
-        </div>
+<div class="form-group">
+    <label>Select Dental Service</label>
+    <select name="service_type" required>
+        <option value="">-- Choose a treatment --</option>
+        <?php
+        if ($service_result->num_rows > 0) {
+            while ($row = $service_result->fetch_assoc()) {
+                $name = $row['service_name'];
+                $selected = ($selected_type === $name) ? "selected" : "";
+                echo "<option value='$name' $selected>$name</option>";
+            }
+        }
+        ?>
+    </select>
+</div>
 
-        <div class="form-group">
-            <label>Preferred Time</label>
-            <input type="time" name="app_time" required>
-        </div>
+<div class="form-group">
+    <label>Preferred Date</label>
+    <input type="date" name="app_date" id="app_date"
+           min="<?= date('Y-m-d') ?>" required onchange="validateTime()">
+</div>
 
-        <button type="submit">Confirm Booking</button>
+<div class="form-group">
+    <label>Preferred Time</label>
+    <input type="time" name="app_time" id="app_time"
+           required onchange="validateTime()">
 
-        <a href="userDashBoard.php" class="btn-home">Back to Dashboard</a>
+    <div class="open-hours-info">
+        <strong>🕒 Open Hours</strong><br>
+        Mon–Fri: 10:00 AM – 06:00 PM<br>
+        Sat–Sun: 11:00 AM – 05:00 PM<br>
+        <em>Last appointment: 30 mins before closing</em>
     </div>
+</div>
+
+<button type="submit" id="submitBtn">Confirm Booking</button>
+<a href="userDashBoard.php" class="btn-home">Back to Dashboard</a>
+
+</div>
 </form>
+
+<script>
+function toMinutes(time) {
+    const [h, m] = time.split(":").map(Number);
+    return h * 60 + m;
+}
+
+function validateTime() {
+    const date = document.getElementById("app_date").value;
+    const time = document.getElementById("app_time").value;
+    const btn = document.getElementById("submitBtn");
+
+    if (!date || !time) return;
+
+    const day = new Date(date).getDay(); // 0 Sun - 6 Sat
+    const t = toMinutes(time);
+
+    let open, last, msg;
+
+    if (day >= 1 && day <= 5) {
+        open = toMinutes("10:00");
+        last = toMinutes("17:30");
+        msg = "Weekdays: 10:00 - 17:30 (last appointment)";
+    } else {
+        open = toMinutes("11:00");
+        last = toMinutes("16:30");
+        msg = "Weekend: 11:00 - 16:30 (last appointment)";
+    }
+
+    if (t < open || t > last) {
+        alert(msg);
+        document.getElementById("app_time").value = "";
+        btn.disabled = true;
+        btn.style.opacity = "0.5";
+    } else {
+        btn.disabled = false;
+        btn.style.opacity = "1";
+    }
+}
+</script>
 
 </body>
 </html>

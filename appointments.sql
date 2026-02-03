@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Feb 01, 2026 at 09:53 AM
+-- Generation Time: Feb 03, 2026 at 02:40 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -33,7 +33,9 @@ CREATE TABLE `appointments` (
   `app_date` date NOT NULL,
   `app_time` time NOT NULL,
   `service_type` varchar(100) NOT NULL,
-  `status` varchar(50) DEFAULT 'Pending'
+  `status` varchar(50) DEFAULT 'Pending',
+  `payment_status` varchar(50) DEFAULT 'Pending',
+  `price` decimal(10,2) DEFAULT 0.00
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -56,16 +58,6 @@ ALTER TABLE `appointments`
 --
 ALTER TABLE `appointments`
   MODIFY `app_id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- Constraints for dumped tables
---
-
---
--- Constraints for table `appointments`
---
-ALTER TABLE `appointments`
-  ADD CONSTRAINT `appointments_ibfk_1` FOREIGN KEY (`cus_id`) REFERENCES `customer` (`Cus_ID`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
