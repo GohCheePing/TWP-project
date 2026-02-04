@@ -47,7 +47,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $message = "<div class='error'>Selected time is outside business hours.</div>";
     } else {
         // --- Database Insertion ---
-        // Status is set to 'Confirmed' directly as payment is not required
         $sql = "INSERT INTO appointments (cus_id, service_type, app_date, app_time, status) VALUES (?, ?, ?, ?, 'Confirmed')";
         $stmt = $conn->prepare($sql);
         $stmt->bind_param("isss", $cus_id, $service_type, $app_date, $app_time);
@@ -71,19 +70,41 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <link rel="stylesheet" href="userRegStyle.css">
     <style>
         .form-group { margin-bottom: 15px; text-align: left; }
-        .form-group label { font-weight: bold; margin-bottom: 5px; display:block; }
+        .form-group label { font-weight: bold; margin-bottom: 5px; display:block; color: #333; }
+        
         select, input {
             width: 100%;
             padding: 12px;
             border-radius: 8px;
-            border: 1px solid #ccc;
+            border: 1px solid rgba(0,0,0,0.2);
+            background: rgba(255, 255, 255, 0.9);
         }
+
         .open-hours-info {
             font-size: 12px;
-            background: #fff3e0;
-            padding: 8px;
-            border-radius: 6px;
-            margin-top: 5px;
+            background: rgba(255, 243, 224, 0.8);
+            padding: 10px;
+            border-radius: 8px;
+            margin-top: 10px;
+            color: #5d4037;
+            border-left: 4px solid #ffb74d;
+        }
+
+        /* Center the Back to Dashboard link */
+        .btn-home {
+            display: block;
+            text-align: center;
+            margin-top: 20px;
+            color: #357abd;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 14px;
+            transition: 0.3s;
+        }
+
+        .btn-home:hover {
+            text-decoration: underline;
+            color: #2600ff;
         }
     </style>
 </head>
@@ -132,6 +153,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </div>
 
         <button type="submit" id="submitBtn">Confirm Booking</button>
+        
         <a href="userDashBoard.php" class="btn-home">Back to Dashboard</a>
     </div>
 </form>
@@ -154,19 +176,19 @@ function validateTime() {
 
     let open, last, msg;
 
-    // Javascript getDay(): 1=Mon, 5=Fri, 6=Sat, 0=Sun
+    // 1=Mon, 5=Fri, 6=Sat, 0=Sun
     if (day >= 1 && day <= 5) {
         open = toMinutes("10:00");
         last = toMinutes("17:30");
-        msg = "Weekdays: 10:00 - 17:30 (last appointment)";
+        msg = "Weekdays: 10:00 AM - 05:30 PM (Last Slot)";
     } else {
         open = toMinutes("11:00");
         last = toMinutes("16:30");
-        msg = "Weekend: 11:00 - 16:30 (last appointment)";
+        msg = "Weekends: 11:00 AM - 04:30 PM (Last Slot)";
     }
 
     if (t < open || t > last) {
-        alert(msg);
+        alert("Sorry! " + msg);
         document.getElementById("app_time").value = "";
         btn.disabled = true;
         btn.style.opacity = "0.5";
@@ -176,6 +198,5 @@ function validateTime() {
     }
 }
 </script>
-
 </body>
 </html>
