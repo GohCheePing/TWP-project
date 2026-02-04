@@ -1,9 +1,13 @@
 <?php
 session_start();
-if (!isset($_SESSION["admin"])) {
+include 'database.php';
+
+if (!isset($_SESSION['admin'])) {
     header("Location: AdminLog.php");
     exit;
 }
+
+$result = $conn->query("SELECT * FROM customer");
 ?>
 
 <!DOCTYPE html>
@@ -11,69 +15,68 @@ if (!isset($_SESSION["admin"])) {
 <head>
 <meta charset="UTF-8">
 <title>Admin Customers</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 
 <style>
 body {
-    font-family: Arial;
-    background: #f4f7fb;
+    background-color: #f4f7fb;
+    font-family: Arial, sans-serif;
 }
 .container {
-    max-width: 1100px;
-    margin: 40px auto;
+    margin-top: 50px;
 }
-table {
-    width: 100%;
-    border-collapse: collapse;
-    background: white;
+.table th, .table td {
+    vertical-align: middle;
 }
-th, td {
-    padding: 14px;
-    border-bottom: 1px solid #ddd;
-    text-align: center;
+.password-cell {
+    max-width: 250px;
+    word-break: break-all;   /* 长密码自动换行 */
+    font-family: monospace;  /* 看起来像 hash */
+    font-size: 0.85rem;
 }
-th {
-    background: #3aaed8;
-    color: white;
-}
-.action-btn {
-    padding: 6px 12px;
-    border-radius: 6px;
-    color: white;
-    text-decoration: none;
-}
-.view { background: #3498db; }
-.disable { background: #e67e22; }
 </style>
 </head>
 
 <body>
-<div class="container">
+<div class="container py-4">
+    <h2 class="mb-4">Manage Customers</h2>
 
-<h2>Manage Customers</h2>
+    <form method="GET" action="edit_customer.php">
+        <table class="table table-striped table-bordered">
+            <thead class="table-primary">
+                <tr>
+                    <th>Select</th>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>IC</th>
+                    <th>Phone</th>
+                    <th>Email</th>
+                    <th>Password</th>
+                </tr>
+            </thead>
+            <tbody>
+            <?php while($row = $result->fetch_assoc()): ?>
+                <tr>
+                    <td class="text-center">
+                        <input type="radio" name="id" value="<?= $row['Cus_ID'] ?>" required>
+                    </td>
+                    <td><?= $row['Cus_ID'] ?></td>
+                    <td><?= htmlspecialchars($row['Cus_Name']) ?></td>
+                    <td><?= htmlspecialchars($row['Cus_IC']) ?></td>
+                    <td><?= htmlspecialchars($row['Cus_Phone']) ?></td>
+                    <td><?= htmlspecialchars($row['Cus_Email']) ?></td>
+                    <td class="password-cell">
+                        <?= htmlspecialchars($row['Cus_Password']) ?>
+                    </td>
+                </tr>
+            <?php endwhile; ?>
+            </tbody>
+        </table>
 
-<table>
-<tr>
-    <th>Customer ID</th>
-    <th>Name</th>
-    <th>Phone</th>
-    <th>Email</th>
-    <th>Action</th>
-</tr>
-
-<tr>
-    <td>1</td>
-    <td>LZY</td>
-    <td>01110336789</td>
-    <td>lzy1@gmail.com</td>
-    <td>
-        <a class="action-btn view" href="#">View</a>
-        <a class="action-btn disable" href="#">Deactivate</a>
-    </td>
-</tr>
-
-</table>
-
-<p><a href="editproduct.php">← Back to Dashboard</a></p>
+        <button type="submit" class="btn btn-primary">
+            Edit
+        </button>
+    </form>
 </div>
 </body>
 </html>
