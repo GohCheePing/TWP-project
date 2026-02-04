@@ -9,9 +9,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $price = $_POST['price'];
 
     $stmt = $conn->prepare("UPDATE services SET price=? WHERE service_id=?");
-    $stmt->bind_param("di", $price, $id);
+    $stmt->bind_param("di",$price,$id);
     $stmt->execute();
-
     header("Location: adminservices.php");
     exit;
 }
@@ -32,10 +31,11 @@ body {
     background-image: url('images/bgImage1.jpeg');
     background-repeat: no-repeat;
     background-position: center center;
-    background-size: 100%;
+    background-size: 100% ; 
 }
 .container {
     margin-top: 60px;
+    
 }
 .card {
     max-width: 500px;
@@ -44,6 +44,7 @@ body {
     border-radius: 15px;
     box-shadow: 0 8px 25px rgba(0,0,0,0.1);
     background-color: #fff;
+    
 }
 .card h2 {
     margin-bottom: 25px;
@@ -65,35 +66,29 @@ input[disabled] {
 <div class="container">
     <div class="card">
         <h2>Edit Service Price</h2>
-
         <form method="POST">
             <div class="mb-3">
                 <label class="form-label">Service Name</label>
-                <input
-                    type="text"
-                    value="<?= htmlspecialchars($service['service_name']) ?>"
-                    class="form-control"
-                    disabled
-                >
+                <input type="text" value="<?= htmlspecialchars($service['service_name']) ?>" class="form-control" disabled>
             </div>
 
-            <div class="mb-3">
-                <label class="form-label">Price (RM)</label>
-                <input
-                    type="text"
-                    name="price"
-                    value="<?= htmlspecialchars($service['price']) ?>"
-                    class="form-control"
-                    required
-                    inputmode="numeric"
-                    oninput="
-                        this.value = this.value
-                            .replace(/[^0-9.]/g, '')
-                            .replace(/(\..*)\./g, '$1')
-                            .replace(/^(\d+\.?\d{0,2}).*$/, '$1')
-                    "
-                >
-            </div>
+<div class="mb-3">
+    <label class="form-label">Price (RM)</label>
+    <input
+        type="text"
+        name="price"
+        value="<?= htmlspecialchars($service['price']) ?>"
+        class="form-control"
+        required
+        inputmode="numberic"
+        oninput="
+            this.value = this.value
+                .replace(/[^0-9.]/g, '')
+                .replace(/(\..*)\./g, '$1')
+                .replace(/^(\d+\.?\d{0,2}).*$/, '$1')
+        "
+    >
+</div>
 
             <button type="submit" class="btn btn-success">Save</button>
         </form>
