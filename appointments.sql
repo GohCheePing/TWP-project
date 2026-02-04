@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Feb 03, 2026 at 02:40 PM
+-- Generation Time: Feb 04, 2026 at 09:49 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -39,6 +39,19 @@ CREATE TABLE `appointments` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
+-- Dumping data for table `appointments`
+--
+
+INSERT INTO `appointments` (`app_id`, `cus_id`, `app_date`, `app_time`, `service_type`, `status`, `payment_status`, `price`) VALUES
+(1, 10, '2026-02-11', '11:46:00', 'Teeth Filling', 'Confirmed', 'Paid', 0.00),
+(2, 10, '2026-02-03', '11:51:00', 'Teeth Filling', 'Confirmed', 'Pending', 0.00),
+(3, 10, '2026-02-05', '10:17:00', 'Teeth Filling', 'Confirmed', 'Pending', 0.00),
+(4, 10, '2026-02-05', '11:12:00', 'Clear Aligner', 'Confirmed', 'Pending', 0.00),
+(5, 8, '2026-02-05', '15:08:00', 'Teeth Crown and Bridge', 'Confirmed', 'Pending', 0.00),
+(6, 8, '2026-02-06', '15:26:00', 'Teeth Scaling', 'Confirmed', 'Pending', 0.00),
+(7, 8, '2026-02-05', '16:30:00', 'Teeth Scaling', 'Confirmed', 'Pending', 0.00);
+
+--
 -- Indexes for dumped tables
 --
 
@@ -57,7 +70,7 @@ ALTER TABLE `appointments`
 -- AUTO_INCREMENT for table `appointments`
 --
 ALTER TABLE `appointments`
-  MODIFY `app_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `app_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
