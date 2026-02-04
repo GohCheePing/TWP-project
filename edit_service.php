@@ -72,10 +72,23 @@ input[disabled] {
                 <input type="text" value="<?= htmlspecialchars($service['service_name']) ?>" class="form-control" disabled>
             </div>
 
-            <div class="mb-3">
-                <label class="form-label">Price (RM)</label>
-                <input type="number" step="0.01" name="price" value="<?= $service['price'] ?>" required class="form-control">
-            </div>
+<div class="mb-3">
+    <label class="form-label">Price (RM)</label>
+    <input
+        type="text"
+        name="price"
+        value="<?= htmlspecialchars($service['price']) ?>"
+        class="form-control"
+        required
+        inputmode="numberic"
+        oninput="
+            this.value = this.value
+                .replace(/[^0-9.]/g, '')
+                .replace(/(\..*)\./g, '$1')
+                .replace(/^(\d+\.?\d{0,2}).*$/, '$1')
+        "
+    >
+</div>
 
             <button type="submit" class="btn btn-success">Save</button>
         </form>
