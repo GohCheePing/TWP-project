@@ -41,16 +41,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // =====================
     // Email format check
     // =====================
-    if (!empty($email) && !filter_var($email, FILTER_VALIDATE_EMAIL)) {
+    if (!empty($email) && !filter_var($email, FILTER_VALIDATE_EMAIL)) { //Uses PHP’s built-in function to verify valid email format
         $errors[] = "Invalid email format.";
     }
 
     // =====================
     // Password strength check
     // =====================
-    if (!empty($password)) {
+    if (!empty($password)) { 
 
-        if (strlen($password) < 8) {
+        if (strlen($password) < 8) { //get length of $password
             $errors[] = "Password must be at least 8 characters.At least one uppercase letter, one lowercase letter, one number, and one symbol are required.";
         }
         if (!preg_match('/[A-Z]/', $password)) {
@@ -83,13 +83,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $checkStmt = $conn->prepare(
             "SELECT Cus_IC, Cus_Phone, Cus_Email 
              FROM customer 
-             WHERE Cus_IC = ? OR Cus_Phone = ? OR Cus_Email = ?"
+             WHERE Cus_IC = ? OR Cus_Phone = ? OR Cus_Email = ?" //? meaning: Placeholders for user input, replaced later to prevent SQL injection.
         );
-        $checkStmt->bind_param("sss", $ic, $phone, $email);
-        $checkStmt->execute();
-        $result = $checkStmt->get_result();
+        $checkStmt->bind_param("sss", $ic, $phone, $email); ///sss means three string parameters
+        $checkStmt->execute(); //Executes the prepared SQL statement.
+        $result = $checkStmt->get_result(); //Retrieves the result set returned by the database.
 
-        if ($row = $result->fetch_assoc()) {
+        if ($row = $result->fetch_assoc()) { //Fetches the first matching record as an associative array. If a record is found, it means at least one duplicate value exists.
 
             if ($row['Cus_IC'] === $ic) {
                 $errors[] = "IC Number already registered.";
@@ -102,7 +102,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
         }
 
-        $checkStmt->close();
+        $checkStmt->close(); //Closes the prepared statement and frees database resources.
     }
 
     // =====================
@@ -110,9 +110,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // =====================
     if (empty($errors)) {
 
-        $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+        $hashedPassword = password_hash($password, PASSWORD_DEFAULT); //Encrypts the password using PHP’s built-in password_hash() function with a strong default algorithm.
 
-        $stmt = $conn->prepare(
+        $stmt = $conn->prepare( //Creates a prepared statement to insert a new customer record
             "INSERT INTO customer
             (Cus_Name, Cus_Password, Cus_IC, Cus_Phone, Cus_Email)
             VALUES (?, ?, ?, ?, ?)"
@@ -123,7 +123,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($stmt->execute()) {
             $success = "Registration successful!";
 
-             $ic = $name = $phone = $email = '';
+             $ic = $name = $phone = $email = ''; //Clears the input variables (IC, name, phone, email) to reset the form.
 
             
 
