@@ -88,12 +88,23 @@ input[readonly] { background-color: #e9ecef; }
 
             <div class="mb-3">
                 <label class="form-label">IC</label>
-                <input type="text" name="ic" value="<?= htmlspecialchars($cus['Cus_IC']) ?>" class="form-control" required>
+                <input type="text" name="ic" 
+                inputmode="numeric"
+       maxlength="12"
+       pattern="\d{12}"
+       title="IC Number must be exactly 12 digits"
+       oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0, 12);"
+                value="<?= htmlspecialchars($cus['Cus_IC']) ?>" class="form-control" required>
             </div>
 
             <div class="mb-3">
                 <label class="form-label">Phone</label>
-                <input type="text" name="phone" value="<?= htmlspecialchars($cus['Cus_Phone']) ?>" class="form-control" required>
+                <input type="text" name="phone"
+                inputmode="numeric"
+                pattern="01\d{8,9}"
+                title="Phone must start with 01 and be 10–11 digits"
+                maxlength="11"
+                oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0, 11);" value="<?= htmlspecialchars($cus['Cus_Phone']) ?>" class="form-control" required>
             </div>
 
             <div class="mb-3">
