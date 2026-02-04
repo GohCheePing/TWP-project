@@ -53,9 +53,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         if ($stmt->execute()) {
             // Redirect to confirmation page on success
-            header("Location: confirmation.php?service=" . urlencode($service_type) . "&date=$app_date&time=$app_time");
+            $price_query = $conn->prepare("SELECT price FROM services WHERE service_name = ?");
+            $price_query->bind_param("s", $service_type);
+            $price_query->execute();
+            $price_res = $price_query->get_result()->fetch_assoc();
+            $service_price = $price_res['price'] ?? '0.00';
+            
+            // add &price when turn to URL
+            header("Location: confirmation.php?service=" . urlencode($service_type) . "&date=$app_date&time=$app_time&price=$service_price");
             exit;
-        } else {
+        } 
+        else {
             $message = "<div class='error'>Database error: Unable to save booking.</div>";
         }
     }

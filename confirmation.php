@@ -8,12 +8,12 @@ if (!isset($_SESSION['cus_id'])) {
     exit;
 }
 
-// Retrieve details from URL parameters
+// 获取 URL 参数
 $service = $_GET['service'] ?? 'Dental Treatment';
-$date = $_GET['date'] ?? '';
-$time = $_GET['time'] ?? '';
+$price   = $_GET['price'] ?? '0.00'; 
+$date    = $_GET['date'] ?? '';
+$time    = $_GET['time'] ?? '';
 
-// Formatting for display
 $formattedDate = !empty($date) ? date('l, d F Y', strtotime($date)) : 'Not specified';
 $formattedTime = !empty($time) ? date('h:i A', strtotime($time)) : 'Not specified';
 ?>
@@ -28,171 +28,134 @@ $formattedTime = !empty($time) ? date('h:i A', strtotime($time)) : 'Not specifie
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
     
     <style>
-        /* General Body Styling */
+        :root {
+            --main-blue: #6cc4ff;
+            --dark-blue: #3aaed8;
+            --soft-bg: #f0f9ff;
+        }
+
         body {
-            background: url('images/bgImage1.jpeg') no-repeat center center fixed;
-            background-size: cover;
-            
+            background: linear-gradient(135deg, #e0f2fe 0%, #f8fafc 100%);
             font-family: 'Poppins', sans-serif;
+            min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
-            min-height: 100vh;
-            margin: 0;
-            
-            /* Enable color printing */
-            -webkit-print-color-adjust: exact;
-            print-color-adjust: exact;
+            padding: 20px;
         }
 
-        /* Glassmorphism Card Effect */
-        .confirmation-card {
-            background: rgba(255, 255, 255, 0.9); /* Semi-transparent white */
-            backdrop-filter: blur(15px); /* Blur effect for the background image behind card */
-            -webkit-backdrop-filter: blur(15px);
-            
-            border-radius: 40px;
-            box-shadow: 0 40px 100px rgba(0, 0, 0, 0.3);
-            max-width: 480px;
-            width: 90%;
+        .conf-card {
+            background: white;
+            border-radius: 24px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            max-width: 480px; /* 稍微调宽一点，方便横向排列 */
+            width: 100%;
             overflow: hidden;
             text-align: center;
-            position: relative;
-            border: 1px solid rgba(255, 255, 255, 0.4);
+            animation: slideUp 0.6s ease-out;
         }
 
-        /* Brand Header */
-        .brand-header {
-            background: linear-gradient(135deg, #6cc4ff, #3aaed8) !important;
-            padding: 50px 20px 60px;
-            color: white !important;
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
-        .brand-header h1 {
-            font-family: 'Fredoka', sans-serif;
-            font-weight: 600;
-            margin: 0;
-            font-size: 2.2rem;
-            letter-spacing: 1px;
+        .success-banner {
+            background: var(--main-blue);
+            padding: 40px 20px;
+            color: white;
         }
 
-        /* Logo Squircle */
-        .logo-circle {
-            width: 110px;
-            height: 110px;
-            background: #ffffff !important;
-            border-radius: 30px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: -55px auto 20px;
-            box-shadow: 0 15px 30px rgba(0,0,0,0.2);
-            position: relative;
-            z-index: 10;
-            border: 5px solid #fff;
+        .check-icon {
+            font-size: 60px;
+            background: white;
+            color: var(--main-blue);
+            width: 100px;
+            height: 100px;
+            line-height: 100px;
+            border-radius: 50%;
+            display: inline-block;
+            margin-bottom: 10px;
         }
 
-        /* Receipt Information Box */
         .details-box {
-            background-color: rgba(255, 255, 255, 0.6) !important;
-            border-radius: 25px;
-            padding: 25px;
-            margin: 20px 35px;
+            background: var(--soft-bg);
+            margin: 25px;
+            padding: 20px;
+            border-radius: 18px;
             text-align: left;
-            border: 2px dashed #6cc4ff !important;
+            border: 1px dashed var(--main-blue);
         }
 
         .detail-label {
-            font-size: 0.75rem;
-            color: #7a92a7 !important;
+            font-size: 11px;
             text-transform: uppercase;
-            font-weight: 700;
-            display: block;
+            color: #7f8c8d;
+            font-weight: 600;
             letter-spacing: 1px;
+            display: block;
         }
 
         .detail-value {
-            font-size: 1.1rem;
-            color: #333 !important;
+            font-size: 15px;
+            color: #2c3e50;
             font-weight: 600;
             margin-bottom: 15px;
         }
 
-        /* Primary Button */
+        .text-price {
+            color: #e67e22; 
+        }
+
         .btn-dashboard {
-            background: linear-gradient(135deg, #6cc4ff, #3aaed8) !important;
-            color: white !important;
-            border: none;
-            padding: 16px;
-            border-radius: 20px;
+            background: var(--dark-blue);
+            color: white;
+            border-radius: 12px;
+            padding: 12px 30px;
             font-weight: 600;
             text-decoration: none;
-            display: block;
-            margin: 10px 35px 0;
-            transition: 0.3s;
-        }
-
-        .btn-dashboard:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 10px 25px rgba(108, 196, 255, 0.5);
-            color: white;
-        }
-
-        /* Print Trigger */
-        .print-link {
             display: inline-block;
-            margin: 20px 0 40px;
-            color: #666;
-            text-decoration: none;
-            cursor: pointer;
-            font-size: 0.9rem;
-            font-weight: 500;
+            margin-bottom: 20px;
+            width: 80%;
         }
 
-        .print-link:hover { color: #3aaed8; }
-
-        /* Print Media Settings */
-        @media print {
-            body { 
-                background: url('images/bgImage1.jpeg') no-repeat center center !important; 
-                background-size: cover !important;
-            }
-            .confirmation-card { 
-                box-shadow: none !important; 
-                margin: 0 auto !important;
-                background: white !important; /* Solid background for paper */
-            }
-            .btn-dashboard, .print-link { display: none !important; }
-            * {
-                -webkit-print-color-adjust: exact !important;
-                print-color-adjust: exact !important;
-            }
+        .print-link {
+            display: block;
+            font-size: 13px;
+            color: #95a5a6;
+            cursor: pointer;
+            margin-bottom: 25px;
         }
     </style>
 </head>
 <body>
 
-<div class="confirmation-card animate__animated animate__backInUp">
-    <div class="brand-header">
-        <h1>Meow Meow Dental</h1>
-        <p class="small mb-0 opacity-75">Quality Dental Care for Every Cat</p>
-    </div>
-
-    <div class="logo-circle animate__animated animate__bounceIn animate__delay-1s">
-        <img src="images/Logo.png" alt="Logo" style="width: 80px; height: 80px; object-fit: contain;">
+<div class="conf-card">
+    <div class="success-banner">
+        <div class="check-icon">
+            <i class="bi bi-calendar-check"></i>
+        </div>
+        <h3 class="fw-bold mb-0" style="font-family: 'Fredoka', sans-serif;">Success!</h3>
     </div>
 
     <div class="px-3">
-        <h4 class="fw-bold text-dark mt-2">Booking Confirmed!</h4>
-        <p class="text-muted small mb-0 px-4">Your visit has been successfully scheduled. We look forward to seeing you!</p>
+        <h4 class="fw-bold text-dark mt-4">Booking Confirmed</h4>
+        <p class="text-muted small mb-0 px-4">Your appointment has been successfully scheduled.</p>
 
         <div class="details-box">
-            <span class="detail-label">Service Type</span>
-            <div class="detail-value text-primary"><?= htmlspecialchars($service) ?></div>
-            
+            <div class="row">
+                <div class="col-7">
+                    <span class="detail-label">Service Type</span>
+                    <div class="detail-value text-primary"><?= htmlspecialchars($service) ?></div>
+                </div>
+                <div class="col-5">
+                    <span class="detail-label">Price</span>
+                    <div class="detail-value text-price">RM <?= number_format($price, 2) ?></div>
+                </div>
+            </div>
+
             <div class="row">
                 <div class="col-7">
                     <span class="detail-label">Appt Date</span>
@@ -220,6 +183,5 @@ $formattedTime = !empty($time) ? date('h:i A', strtotime($time)) : 'Not specifie
     </div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
