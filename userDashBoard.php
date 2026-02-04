@@ -2,9 +2,9 @@
 session_start();
 include 'database.php';
 
-/* ============================================================
-   1. SECURITY CHECK: Redirect to login if session is not active
-   ============================================================ */
+/* =========================
+   1. SECURITY CHECK
+========================= */
 if (!isset($_SESSION['cus_id'])) {
     header("Location: userLog.php");
     exit;
@@ -13,24 +13,46 @@ if (!isset($_SESSION['cus_id'])) {
 $cus_id   = $_SESSION['cus_id'];
 $cus_name = $_SESSION['cus_name'] ?? 'User';
 
-/* ============================================================
-   2. DATA FETCHING: Total appointment count
-   ============================================================ */
-$count_sql = "SELECT COUNT(*) AS total FROM appointments WHERE cus_id = ?";
-$count_stmt = $conn->prepare($count_sql);
+/* =========================
+   2. DATA FETCHING (Stats)
+========================= */
+
+// Auto-detect columns to prevent SQL errors
+$res1 = $conn->query("SHOW COLUMNS FROM services WHERE Field LIKE '%name%'");
+$col_name = ($res1 && $res1->num_rows > 0) ? $res1->fetch_assoc()['Field'] : 's_name';
+
+$res2 = $conn->query("SHOW COLUMNS FROM services WHERE Field LIKE '%price%'");
+$col_price = ($res2 && $res2->num_rows > 0) ? $res2->fetch_assoc()['Field'] : 's_price';
+
+// Total Appointment Count
+$count_stmt = $conn->prepare("SELECT COUNT(*) AS total FROM appointments WHERE cus_id = ?");
 $count_stmt->bind_param("i", $cus_id);
 $count_stmt->execute();
 $total_apps = $count_stmt->get_result()->fetch_assoc()['total'];
 $count_stmt->close();
 
-/* ============================================================
-   3. DATA FETCHING: Get the latest appointment record
-   ============================================================ */
+// Total Spend Calculation (JOIN logic for accuracy)
+$spend_sql = "
+    SELECT SUM(s.$col_price) AS total_spend 
+    FROM appointments a
+    INNER JOIN services s ON TRIM(a.service_type) = TRIM(s.$col_name)
+    WHERE a.cus_id = ?
+";
+$spend_stmt = $conn->prepare($spend_sql);
+$spend_stmt->bind_param("i", $cus_id);
+$spend_stmt->execute();
+$total_spend = $spend_stmt->get_result()->fetch_assoc()['total_spend'] ?? 0.00;
+$spend_stmt->close();
+
+/* =========================
+   3. LATEST APPOINTMENT
+========================= */
 $latest_sql = "
-    SELECT app_id, service_type, app_date, app_time, status, payment_status, price
-    FROM appointments
-    WHERE cus_id = ?
-    ORDER BY app_date DESC, app_time DESC
+    SELECT a.service_type, a.app_date, a.app_time, a.status, s.$col_price AS display_price
+    FROM appointments a
+    LEFT JOIN services s ON TRIM(a.service_type) = TRIM(s.$col_name)
+    WHERE a.cus_id = ?
+    ORDER BY a.app_date DESC, a.app_time DESC
     LIMIT 1
 ";
 $latest_stmt = $conn->prepare($latest_sql);
@@ -44,87 +66,221 @@ $latest_stmt->close();
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>User Dashboard - Meow Meow Dental</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Dashboard - Meow Meow Dental</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
     <style>
-        body { background-color: #f4f7f6; min-height: 100vh; font-family: sans-serif; }
-        .sidebar { width: 260px; position: fixed; height: 100vh; background: #fff; border-right: 1px solid #ddd; padding: 20px; }
-        .main-content { margin-left: 260px; padding: 40px; }
-        .nav-link { color: #333; margin: 10px 0; border-radius: 8px; }
-        .nav-link.active { background-color: #6cc4ff; color: #fff; }
-        .welcome-box { background: linear-gradient(135deg, #6cc4ff, #3aaed8); color: white; padding: 30px; border-radius: 15px; }
-        .card { border: none; border-radius: 15px; }
-        @media (max-width: 768px) { .sidebar { width: 100%; height: auto; position: relative; } .main-content { margin-left: 0; } }
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap');
+
+        :root {
+            --main-blue: #6cc4ff;
+            --dark-blue: #3aaed8;
+            --bg-color: #f8fafc;
+            --sidebar-width: 280px;
+        }
+
+        body { background-color: var(--bg-color); font-family: 'Inter', sans-serif; margin: 0; }
+
+        .dashboard-container { display: flex; min-height: 100vh; }
+
+        /* Sidebar Styling */
+        .sidebar {
+            width: var(--sidebar-width);
+            background: white;
+            border-right: 1px solid #edf2f7;
+            display: flex;
+            flex-direction: column;
+            position: sticky;
+            top: 0;
+            height: 100vh;
+            padding: 20px;
+        }
+
+        .sidebar-brand {
+            padding: 20px 0;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .sidebar-brand img {
+            width: 80px;
+            margin-bottom: 10px;
+        }
+
+        .sidebar-brand h4 {
+            color: var(--dark-blue);
+            font-weight: 700;
+            font-size: 1.25rem;
+            letter-spacing: -0.5px;
+        }
+
+        .menu-item {
+            display: flex;
+            align-items: center;
+            padding: 12px 15px;
+            color: #718096;
+            text-decoration: none;
+            border-radius: 12px;
+            margin-bottom: 8px;
+            transition: all 0.2s ease;
+            font-weight: 500;
+        }
+
+        .menu-item i { font-size: 1.2rem; margin-right: 15px; }
+
+        .menu-item:hover, .menu-item.active {
+            background-color: #f0f9ff;
+            color: var(--dark-blue);
+        }
+
+        /* Main Content Styling */
+        .main-content { flex: 1; padding: 0; overflow-x: hidden; }
+
+        .top-nav {
+            padding: 20px 40px;
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+        }
+
+        .welcome-section {
+            background: var(--main-blue);
+            color: white;
+            padding: 60px 40px;
+            margin: 0 40px 30px 40px;
+            border-radius: 24px;
+        }
+
+        /* Stats Cards */
+        .stat-card {
+            background: white;
+            border-radius: 24px;
+            padding: 30px;
+            border: none;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.02);
+            height: 100%;
+        }
+
+        .icon-square {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            margin-bottom: 20px;
+        }
+
+        .blue-icon { background: #e0f2fe; color: #0ea5e9; }
+        .orange-icon { background: #fff7ed; color: #f97316; }
+
+        .badge-confirmed {
+            background: #dcfce7;
+            color: #15803d;
+            font-weight: 600;
+            padding: 8px 16px;
+            border-radius: 100px;
+        }
+
+        .logout-btn {
+            margin-top: auto;
+            border: 1px solid #feb2b2;
+            color: #f56565;
+            padding: 10px;
+            border-radius: 12px;
+            text-align: center;
+            text-decoration: none;
+            font-weight: 600;
+        }
+        .logout-btn:hover { background: #fff5f5; }
     </style>
 </head>
 <body>
 
-<div class="sidebar d-flex flex-column">
-    <div class="text-center mb-4">
-        <img src="images/Logo.png" width="80">
-        <h5 class="mt-2" style="color:#a86b32;">Meow Meow Dental</h5>
-    </div>
-    <ul class="nav nav-pills flex-column mb-auto">
-        <li class="nav-item"><a href="userDashBoard.php" class="nav-link active"><i class="bi bi-speedometer2 me-2"></i> Dashboard</a></li>
-        <li><a href="service_catalogue.php" class="nav-link"><i class="bi bi-grid me-2"></i> Services</a></li>
-        <li><a href="make_appointment.php" class="nav-link"><i class="bi bi-calendar-plus me-2"></i> Book Appointment</a></li>
-        <li><a href="appointment_records.php" class="nav-link"><i class="bi bi-journal-text me-2"></i> My Records</a></li>
-    </ul>
-    <hr>
-    <a href="logout.php" class="nav-link text-danger"><i class="bi bi-box-arrow-right me-2"></i> Logout</a>
-</div>
-
-<div class="main-content">
-    <div class="welcome-box mb-4">
-        <h2>Welcome back, <?= htmlspecialchars($cus_name) ?> 👋</h2>
-        <p>Manage your feline's dental health appointments.</p>
-        <span class="badge bg-light text-dark"><?= date('l, d F Y') ?></span>
-    </div>
-
-    <div class="row g-4">
-        <div class="col-md-4">
-            <div class="card p-4 shadow-sm text-center">
-                <h6 class="text-muted">Total Visits</h6>
-                <h2 class="fw-bold"><?= $total_apps ?></h2>
-            </div>
+<div class="dashboard-container">
+    <nav class="sidebar">
+        <div class="sidebar-brand">
+            <img src="images/Logo.png" alt="Meow Meow Dental Logo">
+            <h4>Meow Dental</h4>
+        </div>
+        
+        <div class="nav flex-column">
+            <a href="userDashBoard.php" class="menu-item active"><i class="bi bi-grid-fill"></i> Dashboard</a>
+            <a href="service_catalogue.php" class="menu-item"><i class="bi bi-calendar-plus"></i> New Booking</a>
+            <a href="appointment_records.php" class="menu-item"><i class="bi bi-file-earmark-text"></i> My Records</a>
+            <a href="dashboardaboutus.php" class="menu-item"><i class="bi bi-info-circle"></i> About Us</a>
         </div>
 
-        <div class="col-md-8">
-            <div class="card p-4 shadow-sm">
-                <h5 class="fw-bold mb-3">Latest Appointment Status</h5>
+        <a href="logout.php" class="logout-btn mt-5"><i class="bi bi-box-arrow-right me-2"></i> Logout</a>
+    </nav>
+
+    <div class="main-content">
+        <div class="top-nav">
+            <span class="text-muted"><i class="bi bi-person-circle me-2"></i>Logged in as: <strong><?= htmlspecialchars($cus_name) ?></strong></span>
+        </div>
+
+        <div class="welcome-section">
+            <h1 class="fw-bold mb-2">Welcome Back, <?= htmlspecialchars($cus_name) ?>!</h1>
+            <p class="mb-0 opacity-75">Track your dental appointments and history in one place.</p>
+        </div>
+
+        <div class="container-fluid px-5">
+            <div class="row g-4 mb-5">
+                <div class="col-md-4">
+                    <div class="stat-card">
+                        <div class="icon-square blue-icon"><i class="bi bi-calendar-check"></i></div>
+                        <p class="text-muted small fw-bold mb-1">TOTAL APPOINTMENTS</p>
+                        <h2 class="fw-bold mb-0"><?= $total_apps ?></h2>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="stat-card">
+                        <div class="icon-square orange-icon"><i class="bi bi-wallet2"></i></div>
+                        <p class="text-muted small fw-bold mb-1">TOTAL SPEND</p>
+                        <h2 class="fw-bold mb-0">RM <?= number_format($total_spend, 2) ?></h2>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="stat-card d-flex flex-column justify-content-center">
+                        <a href="service_catalogue.php" class="btn btn-primary mb-2 py-3 fw-bold rounded-4 shadow-sm" style="background: #2563eb; border: none;">New Booking</a>
+                        <a href="appointment_records.php" class="btn btn-light py-2 fw-bold text-muted rounded-4">History</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card stat-card border-0 mb-5">
+                <h5 class="fw-bold mb-4">Latest Booking Details</h5>
                 <?php if ($latest_app): ?>
-                    <div class="row">
-                        <div class="col-md-6">
-                            <p><strong>Service:</strong> <?= htmlspecialchars($latest_app['service_type']) ?></p>
-                            <p><strong>Date:</strong> <?= date('d M Y', strtotime($latest_app['app_date'])) ?></p>
-                            <p><strong>Time:</strong> <?= date('h:i A', strtotime($latest_app['app_time'])) ?></p>
+                    <div class="row align-items-center">
+                        <div class="col-md-3">
+                            <p class="text-muted small mb-1">SERVICE</p>
+                            <h6 class="fw-bold text-primary mb-0"><?= htmlspecialchars($latest_app['service_type']) ?></h6>
                         </div>
-                        <div class="col-md-6">
-                            <p><strong>Status:</strong> <span class="badge bg-info"><?= $latest_app['status'] ?></span></p>
-                            <p><strong>Payment:</strong> <span class="badge bg-<?= ($latest_app['payment_status'] == 'Paid') ? 'success' : 'warning text-dark' ?>"><?= $latest_app['payment_status'] ?></span></p>
-                            <p><strong>Amount:</strong> RM <?= number_format($latest_app['price'], 2) ?></p>
+                        <div class="col-md-4">
+                            <p class="text-muted small mb-1">DATE & TIME</p>
+                            <h6 class="fw-bold mb-0"><?= date("d M Y", strtotime($latest_app['app_date'])) ?> | <?= date("h:i A", strtotime($latest_app['app_time'])) ?></h6>
+                        </div>
+                        <div class="col-md-2">
+                            <p class="text-muted small mb-1">PRICE</p>
+                            <h6 class="fw-bold text-danger mb-0">RM <?= number_format($latest_app['display_price'] ?? 0, 2) ?></h6>
+                        </div>
+                        <div class="col-md-3 text-end">
+                            <span class="badge-confirmed"><?= htmlspecialchars($latest_app['status']) ?></span>
                         </div>
                     </div>
-                    
-                    <?php if ($latest_app['payment_status'] !== 'Paid'): ?>
-                        <form action="checkout.php" method="POST" class="mt-3">
-                            <input type="hidden" name="app_id" value="<?= $latest_app['app_id'] ?>">
-                            <input type="hidden" name="service_type" value="<?= htmlspecialchars($latest_app['service_type']) ?>">
-                            <input type="hidden" name="app_date" value="<?= $latest_app['app_date'] ?>">
-                            <input type="hidden" name="app_time" value="<?= $latest_app['app_time'] ?>">
-                            <input type="hidden" name="price" value="<?= $latest_app['price'] ?>">
-                            <button type="submit" name="pay_existing" class="btn btn-danger w-100 fw-bold">PAY NOW</button>
-                        </form>
-                    <?php endif; ?>
                 <?php else: ?>
-                    <p class="text-muted">No records found.</p>
-                    <a href="make_appointment.php" class="btn btn-primary">Book Now</a>
+                    <div class="text-center py-3">
+                        <p class="text-muted mb-0">No booking records found.</p>
+                    </div>
                 <?php endif; ?>
             </div>
         </div>
     </div>
 </div>
+
 </body>
 </html>
