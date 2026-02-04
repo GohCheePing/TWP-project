@@ -45,8 +45,6 @@ $result = $conn->query($query);
 </head>
 <body>
 
-<?php include 'header.php'; ?>
-
 <div class="container py-5">
     <div class="text-center mb-5">
         <h2 style="color: #a86b32; font-weight: bold;">Our Dental Services</h2>
@@ -80,8 +78,5 @@ $result = $conn->query($query);
         <?php endif; ?>
     </div>
 </div>
-
-<?php include 'footer.php'; ?>
-
 </body>
 </html>

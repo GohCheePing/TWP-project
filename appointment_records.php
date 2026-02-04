@@ -64,8 +64,6 @@ $result = $stmt->get_result();
 </head>
 <body>
 
-<?php include 'header.php'; ?>
-
 <div class="container">
     <div class="record-container">
         <div class="d-flex justify-content-between align-items-center mb-4">
@@ -122,8 +120,5 @@ $result = $stmt->get_result();
         </div>
     </div>
 </div>
-
-<?php include 'footer.php'; ?>
-
 </body>
 </html>
