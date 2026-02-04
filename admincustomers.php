@@ -17,7 +17,12 @@ $result = $conn->query("SELECT * FROM customer");
 <title>Admin Customers</title>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 <style>
-body { background-color: #f4f7fb; font-family: Arial, sans-serif; }
+body {
+    background-color: #f4f7fb; font-family: Arial, sans-serif;
+    background-image: url('images/bgImage1.jpeg');
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: 100% ; }
 .container { margin-top: 50px; }
 .table th, .table td { vertical-align: middle; }
 .password-cell { max-width: 250px; word-break: break-all; font-family: monospace; font-size: 0.85rem; color: #666; }
