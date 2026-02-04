@@ -28,9 +28,14 @@ $service = $conn->query("SELECT * FROM services WHERE service_id=$id")->fetch_as
 body {
     background-color: #f4f7fb;
     font-family: Arial, sans-serif;
+    background-image: url('images/bgImage1.jpeg');
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: 100% ; 
 }
 .container {
     margin-top: 60px;
+    
 }
 .card {
     max-width: 500px;
@@ -39,6 +44,7 @@ body {
     border-radius: 15px;
     box-shadow: 0 8px 25px rgba(0,0,0,0.1);
     background-color: #fff;
+    
 }
 .card h2 {
     margin-bottom: 25px;
