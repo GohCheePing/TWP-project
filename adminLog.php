@@ -16,7 +16,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     } else {
         if ($inputUsername === $adminUsername && $inputPassword === $adminPassword) {
             $_SESSION["admin"] = true;
-            header("Location: editproduct.php");
+            header("Location: adminDashBoard.php"); // <-- 改成 adminDashBoard.php
             exit;
         } else {
             $error = "Invalid Admin Username or Password.";

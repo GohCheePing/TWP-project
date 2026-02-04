@@ -7,65 +7,64 @@ if (!isset($_SESSION['admin'])) {
     exit;
 }
 
-$result = $conn->query("
-    SELECT appointments.*, customer.Cus_Name
-    FROM appointments
-    JOIN customer ON appointments.cus_id = customer.Cus_ID
-    ORDER BY appointments.app_date DESC, appointments.app_time DESC
-");
+$sql = "
+    SELECT a.app_id,a.app_date,a.app_time,a.status,
+           c.Cus_Name,s.service_name,s.price
+    FROM appointments a
+    JOIN customer c ON a.cus_id = c.Cus_ID
+    JOIN services s ON a.service_type = s.service_name
+    ORDER BY a.app_date DESC, a.app_time DESC
+";
+$result = $conn->query($sql);
+if (!$result) die("Query failed: ".$conn->error);
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Admin - Manage Appointments</title>
+<title>Admin - View Appointments</title>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
 <div class="container py-4">
-    <h2>Manage Appointments</h2>
+    <h2>View Appointments</h2>
 
-    <form method="GET" action="edit_appointments.php">
+    <div class="table-responsive">
         <table class="table table-bordered table-striped mt-3">
             <thead class="table-primary">
                 <tr>
-                    <th>Select</th>
                     <th>ID</th>
                     <th>Customer</th>
                     <th>Service</th>
                     <th>Date</th>
                     <th>Time</th>
                     <th>Status</th>
-                    <th>Payment</th>
                     <th>Price (RM)</th>
                 </tr>
             </thead>
             <tbody>
-            <?php if($result && $result->num_rows > 0): ?>
+            <?php if($result->num_rows > 0): ?>
                 <?php while($row = $result->fetch_assoc()): ?>
                     <tr>
-                        <td><input type="radio" name="id" value="<?= $row['app_id'] ?>" required></td>
                         <td><?= $row['app_id'] ?></td>
                         <td><?= htmlspecialchars($row['Cus_Name']) ?></td>
-                        <td><?= htmlspecialchars($row['service_type']) ?></td>
-                        <td><?= $row['app_date'] ?></td>
-                        <td><?= $row['app_time'] ?></td>
+                        <td><?= htmlspecialchars($row['service_name']) ?></td>
+                        <td><?= date('d-m-Y', strtotime($row['app_date'])) ?></td>
+                        <td><?= date('H:i', strtotime($row['app_time'])) ?></td>
                         <td><?= htmlspecialchars($row['status']) ?></td>
-                        <td><?= htmlspecialchars($row['payment_status']) ?></td>
-                        <td><?= number_format($row['price'],2) ?></td>
+                        <td><?= number_format($row['price'], 2) ?></td>
                     </tr>
                 <?php endwhile; ?>
             <?php else: ?>
-                <tr>
-                    <td colspan="9" class="text-center">No appointments found.</td>
-                </tr>
+                <tr><td colspan="7" class="text-center">No appointments found.</td></tr>
             <?php endif; ?>
             </tbody>
         </table>
+    </div>
 
-        <button type="submit" class="btn btn-primary">Edit</button>
-    </form>
+    <div class="mt-3">
+        <a href="adminDashBoard.php" class="btn btn-secondary">Back to Dashboard</a>
+    </div>
 </div>
 </body>
 </html>
