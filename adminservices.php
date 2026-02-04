@@ -16,6 +16,14 @@ if (!$result) die("Query failed: ".$conn->error);
 <meta charset="UTF-8">
 <title>Admin - Manage Services</title>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+<style> 
+    body {
+    background-image: url('images/bgImage1.jpeg');
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: 100% ; 
+    }
+</style>
 </head>
 <body>
 <div class="container py-4">
