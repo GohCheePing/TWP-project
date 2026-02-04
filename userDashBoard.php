@@ -210,7 +210,7 @@ $latest_stmt->close();
             <a href="userDashBoard.php" class="menu-item active"><i class="bi bi-grid-fill"></i> Dashboard</a>
             <a href="service_catalogue.php" class="menu-item"><i class="bi bi-calendar-plus"></i> New Booking</a>
             <a href="appointment_records.php" class="menu-item"><i class="bi bi-file-earmark-text"></i> My Records</a>
-            <a href="aboutUS.php" class="menu-item"><i class="bi bi-info-circle"></i> About Us</a>
+            <a href="dashboardaboutus.php" class="menu-item"><i class="bi bi-info-circle"></i> About Us</a>
         </div>
 
         <a href="logout.php" class="logout-btn mt-5"><i class="bi bi-box-arrow-right me-2"></i> Logout</a>
