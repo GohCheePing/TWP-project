@@ -1,87 +1,78 @@
 <?php
 session_start();
-if (!isset($_SESSION["admin"])) {
+include 'database.php';
+
+if (!isset($_SESSION['admin'])) {
     header("Location: AdminLog.php");
     exit;
 }
-?>
 
+$sql = "
+    SELECT a.app_id,a.app_date,a.app_time,a.status,
+           c.Cus_Name,s.service_name,s.price
+    FROM appointments a
+    JOIN customer c ON a.cus_id = c.Cus_ID
+    JOIN services s ON a.service_type = s.service_name
+    ORDER BY a.app_date DESC, a.app_time DESC
+";
+$result = $conn->query($sql);
+if (!$result) die("Query failed: ".$conn->error);
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Admin Appointments</title>
-
+<title>Admin - View Appointments</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 <style>
-body {
-    font-family: Arial;
-    background: #f4f7fb;
-}
-.container {
-    max-width: 1100px;
-    margin: 40px auto;
-}
-table {
-    width: 100%;
-    border-collapse: collapse;
-    background: white;
-}
-th, td {
-    padding: 14px;
-    border-bottom: 1px solid #ddd;
-    text-align: center;
-}
-th {
-    background: #3aaed8;
-    color: white;
-}
-.status {
-    padding: 6px 12px;
-    border-radius: 14px;
-    color: white;
-}
-.pending { background: orange; }
-.approved { background: green; }
-.rejected { background: red; }
-.action-btn {
-    padding: 6px 12px;
-    background: #3aaed8;
-    color: white;
-    border-radius: 6px;
-    text-decoration: none;
-}
+    
+    body{
+    background-image: url('images/bgImage1.jpeg');
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: 100% ; }
 </style>
 </head>
-
 <body>
-<div class="container">
+<div class="container py-4">
+    <h2>View Appointments</h2>
 
-<h2>Manage Appointments</h2>
+    <div class="table-responsive">
+        <table class="table table-bordered table-striped mt-3">
+            <thead class="table-primary">
+                <tr>
+                    <th>ID</th>
+                    <th>Customer</th>
+                    <th>Service</th>
+                    <th>Date</th>
+                    <th>Time</th>
+                    <th>Status</th>
+                    <th>Price (RM)</th>
+                </tr>
+            </thead>
+            <tbody>
+            <?php if($result->num_rows > 0): ?>
+                <?php while($row = $result->fetch_assoc()): ?>
+                    <tr>
+                        <td><?= $row['app_id'] ?></td>
+                        <td><?= htmlspecialchars($row['Cus_Name']) ?></td>
+                        <td><?= htmlspecialchars($row['service_name']) ?></td>
+                        <td><?= date('d-m-Y', strtotime($row['app_date'])) ?></td>
+                        <td><?= date('H:i', strtotime($row['app_time'])) ?></td>
+                        <td><?= htmlspecialchars($row['status']) ?></td>
+                        <td><?= number_format($row['price'], 2) ?></td>
+                    </tr>
+                <?php endwhile; ?>
+            <?php else: ?>
+                <tr><td colspan="7" class="text-center">No appointments found.</td></tr>
+            <?php endif; ?>
+            </tbody>
+        </table>
+    </div>
 
-<table>
-<tr>
-    <th>Appointment ID</th>
-    <th>Customer</th>
-    <th>Date</th>
-    <th>Time</th>
-    <th>Status</th>
-    <th>Action</th>
-</tr>
-
-<tr>
-    <td>1001</td>
-    <td>LZY</td>
-    <td>2026-02-01</td>
-    <td>10:00 AM</td>
-    <td><span class="status pending">Pending</span></td>
-    <td>
-        <a class="action-btn" href="#">View</a>
-    </td>
-</tr>
-
-</table>
-
-<p><a href="editproduct.php">← Back to Dashboard</a></p>
+    <div class="mt-3">
+        <a href="adminDashBoard.php" class="btn btn-secondary">Back to Dashboard</a>
+    </div>
 </div>
 </body>
 </html>

@@ -8,7 +8,7 @@ if (!isset($_SESSION['cus_id'])) {
     exit;
 }
 
-// 获取 URL 参数
+// Get URL parameters
 $service = $_GET['service'] ?? 'Dental Treatment';
 $price   = $_GET['price'] ?? '0.00'; 
 $date    = $_GET['date'] ?? '';
@@ -50,7 +50,7 @@ $formattedTime = !empty($time) ? date('h:i A', strtotime($time)) : 'Not specifie
             background: white;
             border-radius: 24px;
             box-shadow: 0 15px 35px rgba(0,0,0,0.1);
-            max-width: 480px; /* 稍微调宽一点，方便横向排列 */
+            max-width: 480px; /* Widen it slightly to facilitate horizontal arrangement */
             width: 100%;
             overflow: hidden;
             text-align: center;
